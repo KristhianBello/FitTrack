@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Bottom navigation menu items -->
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/outline_home_24"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/nav_exercise"
+        android:icon="@drawable/outline_exercise_24"
+        android:title="@string/exercise" />
+
+    <item
+        android:id="@+id/nav_weight"
+        android:icon="@drawable/outline_weight_24"
+        android:title="@string/weight" />
+
+</menu>
+

@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">FitTrack</string>
+    <string name="welcome_message">Bienvenido to FitTrack!</string>
+    <string name="login_button">Iniciar Sesión</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Inicio</string>
+    <string name="exercise">Ejercicio</string>
+    <string name="weight">Peso</string>
+    <string name="add_new">Agregar</string>
+    <string name="create">Create</string>
+    <string name="upload_video">Upload a video</string>
+    <string name="create_short">Create a short</string>
+    <string name="go_live">Go live</string>
+    <string name="navigation_drawer_open">Abrir navegador</string>
+    <string name="navigation_drawer_close">Cerrar navegador</string>
+    <string name="app_working">FitTrack - Aplicación Funcionando!</string>
+</resources>

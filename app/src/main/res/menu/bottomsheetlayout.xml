@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_upload_video"
+        android:title="@string/upload_video"
+        android:icon="@drawable/baseline_add_24"/>
+
+    <item
+        android:id="@+id/action_create_short"
+        android:title="@string/create_short"
+        android:icon="@drawable/outline_exercise_24"/>
+
+    <item
+        android:id="@+id/action_go_live"
+        android:title="@string/go_live"
+        android:icon="@drawable/outline_share_24"/>
+
+</menu>
+
