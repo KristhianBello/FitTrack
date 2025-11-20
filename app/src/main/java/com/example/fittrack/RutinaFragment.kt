@@ -8,9 +8,15 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import androidx.cardview.widget.CardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
+/**
+ * Fragment para gestión de rutinas de ejercicio
+ * Incluye pestañas para "Mis Rutinas" e "Historial"
+ */
 class RutinaFragment : Fragment() {
 
     // UI Components
@@ -48,6 +54,9 @@ class RutinaFragment : Fragment() {
         // Configurar FAB
         setupFAB()
 
+        // Configurar tarjetas de rutinas
+        setupRoutineCards(view)
+
         // Mostrar pestaña inicial (Mis Rutinas)
         showRutinasTab()
     }
@@ -78,14 +87,42 @@ class RutinaFragment : Fragment() {
 
     private fun setupFAB() {
         fabAddRutina.setOnClickListener {
-            // Aquí se puede agregar la funcionalidad para crear una nueva rutina
-            // Por ejemplo: mostrar un diálogo o navegar a una pantalla de creación
-            android.util.Log.d("RutinaFragment", "FAB Principal clickeado")
+            showToast("Crear nueva rutina próximamente disponible")
         }
 
         debugFab.setOnClickListener {
-            // FAB de debug para asegurar que funciona
-            android.util.Log.d("RutinaFragment", "FAB Debug clickeado")
+            showToast("Agregar rutina (en desarrollo)")
+        }
+    }
+
+    private fun setupRoutineCards(view: View) {
+        // Configurar clicks en las tarjetas de rutinas existentes
+        val routineCards = mutableListOf<CardView>()
+
+        // Buscar todas las CardView en el scrollMisRutinas
+        val scrollView = view.findViewById<ScrollView>(R.id.scrollMisRutinas)
+        val linearLayout = scrollView.getChildAt(0) as? LinearLayout
+
+        linearLayout?.let { container ->
+            for (i in 0 until container.childCount) {
+                val child = container.getChildAt(i)
+                if (child is CardView) {
+                    routineCards.add(child)
+                }
+            }
+        }
+
+        // Configurar listeners para cada tarjeta
+        routineCards.forEachIndexed { index, cardView ->
+            cardView.setOnClickListener {
+                when (index) {
+                    0 -> showToast("Rutina 'Full Body Día 1' próximamente disponible")
+                    1 -> showToast("Rutina 'Pecho y Tríceps' próximamente disponible")
+                    2 -> showToast("Rutina 'Espalda y Bíceps' próximamente disponible")
+                    3 -> showToast("Rutina 'Piernas Completas' próximamente disponible")
+                    else -> showToast("Rutina próximamente disponible")
+                }
+            }
         }
     }
 
@@ -123,5 +160,17 @@ class RutinaFragment : Fragment() {
         scrollHistorial.visibility = View.VISIBLE
         scrollMisRutinas.visibility = View.GONE
         recyclerViewRutinas.visibility = View.GONE
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        /**
+         * Factory method para crear una nueva instancia del fragment
+         */
+        @JvmStatic
+        fun newInstance() = RutinaFragment()
     }
 }

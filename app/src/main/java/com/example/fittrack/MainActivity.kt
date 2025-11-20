@@ -78,22 +78,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        // Configurar el Toolbar correctamente sin conflictos
-        setSupportActionBar(toolbar)
+        try {
+            // Configurar el Toolbar correctamente sin conflictos
+            setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+            val toggle = ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close
+            )
+            drawerLayout.addDrawerListener(toggle)
+            toggle.syncState()
 
-        // Configurar el título de la ActionBar
-        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        supportActionBar?.title = "FitTrack"
+            // Configurar el título de la ActionBar
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            supportActionBar?.title = "FitTrack"
+
+            android.util.Log.d("MainActivity", "Toolbar y DrawerToggle configurados correctamente")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "Error configurando toolbar: ${e.message}", e)
+            throw e
+        }
     }
 
     private fun loadInitialFragment() {
@@ -104,76 +111,92 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
-        // Configurar navegación del bottom navigation
-        bottomNavigationView.setOnItemSelectedListener { menuItem ->
-            when(menuItem.itemId) {
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, HomeFragment2())
-                        .commit()
-                    true
+        try {
+            // Configurar navegación del bottom navigation
+            bottomNavigationView.setOnItemSelectedListener { menuItem ->
+                when(menuItem.itemId) {
+                    R.id.nav_home -> {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, HomeFragment2())
+                            .commit()
+                        true
+                    }
+                    R.id.nav_exercise -> {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, RutinaFragment())
+                            .commit()
+                        true
+                    }
+                    R.id.nav_weight -> {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, DetalleFragment())
+                            .commit()
+                        true
+                    }
+                    R.id.nav_profile -> {
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.frame_layout, ProfileFragment())
+                            .commit()
+                        true
+                    }
+                    else -> false
                 }
-                R.id.nav_exercise -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, RutinaFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_weight -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, DetalleFragment())
-                        .commit()
-                    true
-                }
-                R.id.nav_profile -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ProfileFragment())
-                        .commit()
-                    true
-                }
-                else -> false
             }
-        }
 
-        // Configurar navegación del drawer
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when(menuItem.itemId) {
-                R.id.nav_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, HomeFragment2())
-                        .commit()
-                    bottomNavigationView.selectedItemId = R.id.nav_home
-                }
-                R.id.nav_settings -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, ProfileFragment())
-                        .commit()
-                    bottomNavigationView.selectedItemId = R.id.nav_profile
-                }
-                R.id.nav_share -> {
-                    // Implementar funcionalidad de compartir
-                }
-                R.id.nav_about -> {
-                    // Implementar pantalla de About Us
-                }
-                R.id.nav_logout -> {
-                    // Implementar funcionalidad de logout
-                    finish()
+            // Configurar navegación del drawer
+            navigationView.setNavigationItemSelectedListener { menuItem ->
+                try {
+                    when(menuItem.itemId) {
+                        R.id.nav_home -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, HomeFragment2())
+                                .commit()
+                            bottomNavigationView.selectedItemId = R.id.nav_home
+                        }
+                        R.id.nav_settings -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, ProfileFragment())
+                                .commit()
+                            bottomNavigationView.selectedItemId = R.id.nav_profile
+                        }
+                        R.id.nav_share -> {
+                            // Implementar funcionalidad de compartir
+                            android.widget.Toast.makeText(this, "Funcionalidad de compartir próximamente", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                        R.id.nav_about -> {
+                            // Implementar pantalla de About Us
+                            android.widget.Toast.makeText(this, "Acerca de FitTrack v1.0", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                        R.id.nav_logout -> {
+                            // Implementar funcionalidad de logout
+                            android.widget.Toast.makeText(this, "Cerrando sesión...", android.widget.Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    }
+                    drawerLayout.closeDrawers()
+                    true
+                } catch (e: Exception) {
+                    android.util.Log.e("MainActivity", "Error en drawer navigation: ${e.message}", e)
+                    drawerLayout.closeDrawers()
+                    false
                 }
             }
-            drawerLayout.closeDrawers()
-            true
-        }
 
-        // Configurar manejo del botón atrás
-        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(androidx.core.view.GravityCompat.START)) {
-                    drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START)
-                } else {
-                    finish()
+            // Configurar manejo del botón atrás
+            onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (drawerLayout.isDrawerOpen(androidx.core.view.GravityCompat.START)) {
+                        drawerLayout.closeDrawer(androidx.core.view.GravityCompat.START)
+                    } else {
+                        finish()
+                    }
                 }
-            }
-        })
+            })
+
+            android.util.Log.d("MainActivity", "Navegación configurada correctamente")
+        } catch (e: Exception) {
+            android.util.Log.e("MainActivity", "Error configurando navegación: ${e.message}", e)
+            throw e
+        }
     }
 }
