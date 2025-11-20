@@ -5,55 +5,86 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 
 /**
- * A simple [Fragment] subclass.
- * Use the [DetalleFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * Fragment para el control de peso
+ * Muestra métricas clave, gráfico de evolución y últimos registros
  */
 class DetalleFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var tvPesoActual: TextView
+    private lateinit var tvPesoMeta: TextView
+    private lateinit var btnRegistrarPeso: Button
+
+    // Datos de ejemplo
+    private var pesoActual = 85.5f
+    private var pesoMeta = 80.0f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_detalle, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Inicializar vistas
+        initViews(view)
+
+        // Configurar datos
+        setupData()
+
+        // Configurar listeners
+        setupListeners()
+    }
+
+    private fun initViews(view: View) {
+        tvPesoActual = view.findViewById(R.id.tv_peso_actual)
+        tvPesoMeta = view.findViewById(R.id.tv_peso_meta)
+        btnRegistrarPeso = view.findViewById(R.id.btn_registrar_peso)
+    }
+
+    private fun setupData() {
+        // Mostrar peso actual en Cian Brillante
+        tvPesoActual.text = String.format("%.1f kg", pesoActual)
+
+        // Mostrar meta en color suave
+        tvPesoMeta.text = String.format("%.1f kg", pesoMeta)
+    }
+
+    private fun setupListeners() {
+        btnRegistrarPeso.setOnClickListener {
+            // Acción para registrar peso
+            mostrarDialogoRegistrarPeso()
+        }
+    }
+
+    private fun mostrarDialogoRegistrarPeso() {
+        // Por ahora, solo mostrar
+        // En una implementación real, aquí iría un diálogo para ingresar el peso
+        Toast.makeText(
+            context,
+            "Función de registro de peso (próximamente)",
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    // Método para actualizar el peso (será útil cuando se implemente mas adelante)
+    private fun actualizarPeso(nuevoPeso: Float) {
+        pesoActual = nuevoPeso
+        tvPesoActual.text = String.format("%.1f kg", pesoActual)
     }
 
     companion object {
         /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetalleFragment.
+         * Factory method para crear una nueva instancia del fragment
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetalleFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = DetalleFragment()
     }
 }
