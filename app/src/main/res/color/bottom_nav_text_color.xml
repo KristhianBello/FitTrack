@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Estado activo/seleccionado - Texto blanco siempre -->
+    <item android:color="@color/clean_stat" android:state_checked="true" />
+    <!-- Estado normal/inactivo - Texto blanco translúcido -->
+    <item android:color="@color/clean_stat" android:alpha="0.7" />
+</selector>
+

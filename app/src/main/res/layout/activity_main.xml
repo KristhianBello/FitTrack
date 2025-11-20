@@ -41,13 +41,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/clean_stat"
+            android:background="@color/track_night"
             android:elevation="8dp"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu"
-            app:itemIconTint="@color/fit_glow"
-            app:itemTextColor="@color/track_night"
-            app:itemActiveIndicatorStyle="@null" />
+            app:itemIconTint="@color/bottom_nav_icon_color"
+            app:itemTextColor="@color/bottom_nav_text_color"
+            app:itemActiveIndicatorStyle="@style/CustomBottomNavActiveIndicator"
+            app:itemRippleColor="@color/fit_glow"
+            app:elevation="8dp" />
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
