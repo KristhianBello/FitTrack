@@ -1,7 +1,33 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.FitTrack" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.FitTrack" parent="Theme.Material3.DayNight">
+        <!-- Colores principales usando la nueva paleta -->
+        <item name="colorPrimary">@color/track_night</item>
+        <item name="colorOnPrimary">@color/clean_stat</item>
+        <item name="colorPrimaryVariant">@color/track_night</item>
+
+        <!-- Colores secundarios -->
+        <item name="colorSecondary">@color/fit_glow</item>
+        <item name="colorOnSecondary">@color/track_night</item>
+        <item name="colorSecondaryVariant">@color/progress_neon</item>
+
+        <!-- Colores de superficie y fondo -->
+        <item name="colorSurface">@color/app_surface</item>
+        <item name="colorOnSurface">@color/track_night</item>
+        <item name="android:colorBackground">@color/app_background</item>
+        <item name="colorOnBackground">@color/track_night</item>
+        <item name="colorSurfaceVariant">@color/app_background</item>
+        <item name="android:windowBackground">@color/app_background</item>
+
+        <!-- Colores de acento -->
+        <item name="colorAccent">@color/fit_glow</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">@color/track_night</item>
+        <item name="android:navigationBarColor">@color/clean_stat</item>
+
+        <!-- Disable default ActionBar to use custom Toolbar -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 </resources>

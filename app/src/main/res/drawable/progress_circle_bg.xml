@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <!-- Fondo gris suave -->
+    <solid android:color="#E8E8E8" />
+
+    <!-- Borde del progreso -->
+    <stroke
+        android:width="8dp"
+        android:color="@color/progress_neon" />
+
+    <size
+        android:width="120dp"
+        android:height="120dp" />
+
+</shape>
+

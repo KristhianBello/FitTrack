@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadInitialFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, HomeFragment())
+            .replace(R.id.frame_layout, HomeFragment2())
             .commit()
         bottomNavigationView.selectedItemId = R.id.nav_home
     }
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             when(menuItem.itemId) {
                 R.id.nav_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, HomeFragment())
+                        .replace(R.id.frame_layout, HomeFragment2())
                         .commit()
                     true
                 }
@@ -135,21 +135,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         // Configurar navegación del drawer
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.nav_home -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.frame_layout, HomeFragment())
+                        .replace(R.id.frame_layout, HomeFragment2())
                         .commit()
                     bottomNavigationView.selectedItemId = R.id.nav_home
                 }
                 R.id.nav_settings -> {
-                    // Navegar a configuración
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_layout, ProfileFragment())
                         .commit()
+                    bottomNavigationView.selectedItemId = R.id.nav_profile
                 }
                 R.id.nav_share -> {
                     // Implementar funcionalidad de compartir

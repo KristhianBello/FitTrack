@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
-    <solid android:color="@color/clean_stat" />
+    <solid android:color="@color/bottom_nav_indicator" />
     <size android:width="40dp"
           android:height="40dp" />
 </shape>

@@ -32,7 +32,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/frame_layout"/>
+                android:id="@+id/frame_layout"
+                android:background="@color/soft_metric">
+
+                <com.google.android.material.navigation.NavigationView
+                    android:id="@+id/nav_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="684dp"
+                    android:layout_gravity="start"
+                    android:background="@color/clean_stat"
+                    app:headerLayout="@layout/nav_header"
+                    app:itemIconTint="@color/fit_glow"
+                    app:itemTextColor="@color/track_night"
+                    app:menu="@menu/nav_menu" />
+            </FrameLayout>
 
         </LinearLayout>
 
@@ -53,16 +66,5 @@
 
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/nav_view"
-        android:layout_gravity="start"
-        android:background="@color/clean_stat"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"
-        app:itemIconTint="@color/fit_glow"
-        app:itemTextColor="@color/track_night"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -26,8 +26,20 @@
     <color name="clean_stat">#FFFFFF</color>
 
     <!-- Gris Claro - "Soft Metric" - Soporte/Contraste Suave -->
-    <color name="soft_metric">#F0F0F0</color>
+    <color name="soft_metric">#C0C0C0</color>
 
     <!-- Mantenemos lavender como alias para compatibilidad -->
     <color name="lavender">#00C2E0</color>
+
+    <!-- Colores específicos para navegación -->
+    <color name="bottom_nav_icon_active">@color/track_night</color>
+    <color name="bottom_nav_icon_inactive">@color/fit_glow</color>
+    <color name="bottom_nav_text_active">@color/clean_stat</color>
+    <color name="bottom_nav_text_inactive">#B3FFFFFF</color> <!-- clean_stat con 70% opacidad -->
+    <color name="bottom_nav_indicator">@color/clean_stat</color>
+
+    <!-- Colores para temas -->
+    <color name="app_background">#C0C0C0</color>
+    <color name="app_surface">#C0C0C0</color>
+    <color name="app_surface_variant">#FFFFFF</color>
 </resources>

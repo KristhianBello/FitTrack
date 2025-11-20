@@ -12,10 +12,12 @@
         <item name="colorSecondaryVariant">@color/progress_neon</item>
 
         <!-- Colores de superficie y fondo -->
-        <item name="colorSurface">@color/clean_stat</item>
+        <item name="colorSurface">@color/app_surface</item>
         <item name="colorOnSurface">@color/track_night</item>
-        <item name="android:colorBackground">@color/soft_metric</item>
+        <item name="android:colorBackground">@color/app_background</item>
         <item name="colorOnBackground">@color/track_night</item>
+        <item name="colorSurfaceVariant">@color/app_background</item>
+        <item name="android:windowBackground">@color/app_background</item>
 
         <!-- Colores de acento -->
         <item name="colorAccent">@color/fit_glow</item>
