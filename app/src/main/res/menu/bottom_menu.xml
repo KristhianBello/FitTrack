@@ -12,10 +12,17 @@
         android:icon="@drawable/outline_exercise_24"
         android:title="@string/exercise" />
 
+    <!-- Espacio para el FAB -->
+
     <item
         android:id="@+id/nav_weight"
         android:icon="@drawable/outline_weight_24"
         android:title="@string/weight" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/outline_settings_24"
+        android:title="Perfil" />
 
 </menu>
 

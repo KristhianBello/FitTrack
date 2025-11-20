@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Paleta de colores original (mantenida para compatibilidad) -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,5 +8,26 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="lavender">#8692f7</color>
+
+    <!-- Nueva paleta de colores FitTrack -->
+    <!-- Azul Oscuro/Navy - "Track Night" - Principal/Base -->
+    <color name="track_night">#0C2B5B</color>
+    <color name="primary">#0C2B5B</color>
+
+    <!-- Cian/Turquesa Brillante - "Fit Glow" - Acento/Primario -->
+    <color name="fit_glow">#00C2E0</color>
+    <color name="accent_primary">#00C2E0</color>
+
+    <!-- Verde Neón/Lima - "Progress Neon" - Acento/Secundario -->
+    <color name="progress_neon">#A7F000</color>
+    <color name="accent_secondary">#A7F000</color>
+
+    <!-- Blanco - "Clean Stat" - Texto/Fondo Secundario -->
+    <color name="clean_stat">#FFFFFF</color>
+
+    <!-- Gris Claro - "Soft Metric" - Soporte/Contraste Suave -->
+    <color name="soft_metric">#F0F0F0</color>
+
+    <!-- Mantenemos lavender como alias para compatibilidad -->
+    <color name="lavender">#00C2E0</color>
 </resources>

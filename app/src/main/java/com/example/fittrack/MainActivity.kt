@@ -6,13 +6,11 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
     // UI Components
-    private lateinit var fab: FloatingActionButton
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navigationView: NavigationView
@@ -58,9 +56,6 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView = findViewById(R.id.bottomNavigationView)
             android.util.Log.d("MainActivity", "bottomNavigationView encontrado")
 
-            android.util.Log.d("MainActivity", "Buscando fab...")
-            fab = findViewById(R.id.fab)
-            android.util.Log.d("MainActivity", "fab encontrado")
 
             android.util.Log.d("MainActivity", "Buscando drawerLayout...")
             drawerLayout = findViewById(R.id.drawer_layout)
@@ -83,8 +78,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        // No configurar como ActionBar para evitar conflictos
-        // setSupportActionBar(toolbar) // Comentado temporalmente
+        // Configurar el Toolbar correctamente sin conflictos
+        setSupportActionBar(toolbar)
+
         val toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
@@ -94,6 +90,10 @@ class MainActivity : AppCompatActivity() {
         )
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+
+        // Configurar el título de la ActionBar
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        supportActionBar?.title = "FitTrack"
     }
 
     private fun loadInitialFragment() {
@@ -121,6 +121,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_weight -> {
                     supportFragmentManager.beginTransaction()
+                        .replace(R.id.frame_layout, DetalleFragment())
+                        .commit()
+                    true
+                }
+                R.id.nav_profile -> {
+                    supportFragmentManager.beginTransaction()
                         .replace(R.id.frame_layout, ProfileFragment())
                         .commit()
                     true
@@ -129,11 +135,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Configurar FAB
-        fab.setOnClickListener {
-            // Aquí puedes agregar la funcionalidad del FAB
-            // Por ejemplo, mostrar un diálogo o navegar a una nueva pantalla
-        }
 
         // Configurar navegación del drawer
         navigationView.setNavigationItemSelectedListener { menuItem ->

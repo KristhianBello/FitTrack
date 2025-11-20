@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/soft_metric"
     tools:context=".DetalleFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Detalle de Rutina"
+        android:text="Control de Peso"
         android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="@color/lavender"
-        />
+        android:textSize="28sp"
+        android:textColor="@color/track_night"
+        android:textStyle="bold" />
 
 </FrameLayout>
