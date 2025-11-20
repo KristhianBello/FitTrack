@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Fondo cian muy suave pero visible -->
+    <solid android:color="#E6F7FF" />
+
+    <!-- Borde cian más pronunciado -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/fit_glow" />
+
+    <corners android:radius="16dp" />
+
+</shape>
+
