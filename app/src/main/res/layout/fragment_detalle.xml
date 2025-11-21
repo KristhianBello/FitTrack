@@ -17,14 +17,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Control de Peso"
+            android:text="@string/control_peso"
             android:textSize="24sp"
             android:textColor="@color/track_night"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="20dp" />
 
-        <!-- Métricas Clave - Tarjetas superiores -->
+        <!--Tarjetas superiores -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Peso Actual"
+                        android:text="@string/peso_actual"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
                         android:layout_marginBottom="8dp" />
@@ -60,7 +60,7 @@
                         android:id="@+id/tv_peso_actual"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="85.5 kg"
+                        android:text="@string/peso_placeholder"
                         android:textSize="20sp"
                         android:textColor="@color/fit_glow"
                         android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Meta"
+                        android:text="@string/meta"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
                         android:layout_marginBottom="8dp" />
@@ -98,7 +98,7 @@
                         android:id="@+id/tv_peso_meta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="80.0 kg"
+                        android:text="@string/meta_placeholder"
                         android:textSize="20sp"
                         android:textColor="@color/track_night"
                         android:textStyle="bold" />
@@ -127,13 +127,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mi Evolución"
+                    android:text="@string/mi_evolucion"
                     android:textSize="18sp"
                     android:textColor="@color/track_night"
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Aquí iría el gráfico real, por ahora placeholder -->
+                <!-- Aquí irá el gráfico real, por ahora placeholder -->
                 <FrameLayout
                     android:id="@+id/chart_container"
                     android:layout_width="match_parent"
@@ -144,7 +144,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Gráfico de Evolución\n(Línea en Cian Brillante)"
+                        android:text="@string/grafico_evolucion_placeholder"
                         android:gravity="center"
                         android:textColor="@color/fit_glow"
                         android:textStyle="italic" />
@@ -160,13 +160,85 @@
             android:id="@+id/btn_registrar_peso"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/button_primary"
-            android:text="REGISTRAR PESO HOY"
+            android:text="@string/registrar_peso_hoy"
             android:textColor="@color/clean_stat"
             android:textStyle="bold"
             android:textSize="16sp"
             android:elevation="2dp" />
+
+        <!-- Tarjeta de Ingreso de Peso (inicialmente oculta) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_ingreso_peso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/clean_stat"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registrar Nuevo Peso"
+                    android:textSize="18sp"
+                    android:textColor="@color/track_night"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:hint="Peso (kg)"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_nuevo_peso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:textSize="16sp" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end">
+
+                    <Button
+                        android:id="@+id/btn_cancelar_ingreso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cancelar"
+                        android:textColor="@color/track_night"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_marginEnd="8dp"
+                        style="?attr/borderlessButtonStyle" />
+
+                    <Button
+                        android:id="@+id/btn_guardar_peso"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Guardar"
+                        android:textColor="@color/clean_stat"
+                        android:background="@drawable/button_primary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
 
         <!-- Últimos Registros -->
         <androidx.cardview.widget.CardView
@@ -185,7 +257,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Últimos Registros"
+                    android:text="@string/ultimos_registros"
                     android:textSize="18sp"
                     android:textColor="@color/track_night"
                     android:textStyle="bold"
@@ -196,23 +268,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tv_registro1_fecha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="20 Nov 2024"
+                        android:text="@string/registro1_fecha"
                         android:textSize="14sp"
                         android:textColor="@color/soft_metric" />
 
                     <TextView
+                        android:id="@+id/tv_registro1_peso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="85.5 kg"
+                        android:text="@string/registro1_peso"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btn_editar_registro1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Editar"
+                        android:textSize="12sp"
+                        android:textColor="@color/fit_glow"
+                        android:background="?attr/selectableItemBackground"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        style="?attr/borderlessButtonStyle" />
 
                 </LinearLayout>
 
@@ -221,23 +309,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tv_registro2_fecha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="18 Nov 2024"
+                        android:text="@string/registro2_fecha"
                         android:textSize="14sp"
                         android:textColor="@color/soft_metric" />
 
                     <TextView
+                        android:id="@+id/tv_registro2_peso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="85.8 kg"
+                        android:text="@string/registro2_peso"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btn_editar_registro2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Editar"
+                        android:textSize="12sp"
+                        android:textColor="@color/fit_glow"
+                        android:background="?attr/selectableItemBackground"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        style="?attr/borderlessButtonStyle" />
 
                 </LinearLayout>
 
@@ -246,23 +350,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="8dp">
+                    android:layout_marginBottom="8dp"
+                    android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tv_registro3_fecha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="15 Nov 2024"
+                        android:text="@string/registro3_fecha"
                         android:textSize="14sp"
                         android:textColor="@color/soft_metric" />
 
                     <TextView
+                        android:id="@+id/tv_registro3_peso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="86.2 kg"
+                        android:text="@string/registro3_peso"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btn_editar_registro3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Editar"
+                        android:textSize="12sp"
+                        android:textColor="@color/fit_glow"
+                        android:background="?attr/selectableItemBackground"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        style="?attr/borderlessButtonStyle" />
 
                 </LinearLayout>
 
@@ -270,23 +390,39 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
                     <TextView
+                        android:id="@+id/tv_registro4_fecha"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="12 Nov 2024"
+                        android:text="@string/registro4_fecha"
                         android:textSize="14sp"
                         android:textColor="@color/soft_metric" />
 
                     <TextView
+                        android:id="@+id/tv_registro4_peso"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="86.5 kg"
+                        android:text="@string/registro4_peso"
                         android:textSize="14sp"
                         android:textColor="@color/track_night"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btn_editar_registro4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:text="Editar"
+                        android:textSize="12sp"
+                        android:textColor="@color/fit_glow"
+                        android:background="?attr/selectableItemBackground"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="12dp"
+                        style="?attr/borderlessButtonStyle" />
 
                 </LinearLayout>
 

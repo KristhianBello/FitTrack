@@ -159,6 +159,11 @@ class MainActivity : AppCompatActivity() {
                                 .commit()
                             bottomNavigationView.selectedItemId = R.id.nav_profile
                         }
+                        R.id.nav_sensores -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, SensoresFragment())
+                                .commit()
+                        }
                         R.id.nav_share -> {
                             // Implementar funcionalidad de compartir
                             android.widget.Toast.makeText(this, "Funcionalidad de compartir próximamente", android.widget.Toast.LENGTH_SHORT).show()

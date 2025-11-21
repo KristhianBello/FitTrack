@@ -53,7 +53,7 @@
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pako"
+                android:text="Kazuto"
                 android:textSize="28sp"
                 android:textColor="@color/track_night"
                 android:textStyle="bold"

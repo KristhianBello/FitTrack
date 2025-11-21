@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">FitTrack</string>
+    <string name="app_subtitle">Tu compañero de fitness</string>
     <string name="welcome_message">Bienvenido to FitTrack!</string>
     <string name="login_button">Iniciar Sesión</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -15,4 +16,50 @@
     <string name="navigation_drawer_open">Abrir navegador</string>
     <string name="navigation_drawer_close">Cerrar navegador</string>
     <string name="app_working">FitTrack - Aplicación Funcionando!</string>
+
+    <!-- Navigation Header -->
+    <string name="nav_header_title">FitTrack</string>
+    <string name="nav_header_email">tu.email@fittrack.com</string>
+
+    <!-- Fragment Detalle : Control de Peso -->
+    <string name="control_peso">Control de Peso</string>
+    <string name="peso_actual">Peso Actual</string>
+    <string name="peso_placeholder">85.5 kg</string>
+    <string name="meta">Meta</string>
+    <string name="meta_placeholder">80.0 kg</string>
+    <string name="mi_evolucion">Mi Evolución</string>
+    <string name="grafico_evolucion_placeholder">Gráfico de Evolución\n(Línea en Cian Brillante)</string>
+    <string name="registrar_peso_hoy">REGISTRAR PESO HOY</string>
+    <string name="ultimos_registros">Últimos Registros</string>
+
+    <!-- Registros de Peso -->
+    <string name="registro1_fecha">20 Nov 2024</string>
+    <string name="registro1_peso">85.5 kg</string>
+    <string name="registro2_fecha">18 Nov 2024</string>
+    <string name="registro2_peso">85.8 kg</string>
+    <string name="registro3_fecha">15 Nov 2024</string>
+    <string name="registro3_peso">86.2 kg</string>
+    <string name="registro4_fecha">12 Nov 2024</string>
+    <string name="registro4_peso">86.5 kg</string>
+
+    <!-- Navigation Menu Items -->
+    <string name="nav_home">Home</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_share">Share</string>
+    <string name="nav_about">About Us</string>
+    <string name="nav_sensores">Sensores</string>
+    <string name="nav_logout">Logout</string>
+
+    <!-- FAB Strings -->
+    <string name="fab_agregar_rutina">Agregar nueva rutina</string>
+
+    <!-- Sensores Fragment -->
+    <string name="sensores_title">Sensores del Dispositivo</string>
+    <string name="sensor_proximidad">Sensor de Proximidad</string>
+    <string name="sensor_luz">Sensor de Luz (Luminosidad)</string>
+    <string name="sensor_acelerometro_x">Acelerómetro - Eje X</string>
+    <string name="sensor_acelerometro_y">Acelerómetro - Eje Y</string>
+    <string name="sensor_acelerometro_z">Acelerómetro - Eje Z</string>
+    <string name="sensor_no_disponible">Sensor no disponible</string>
+
 </resources>

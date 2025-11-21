@@ -2,39 +2,45 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn = "navigation_view">
+    tools:showIn="navigation_view">
 
-    <group
-        android:checkableBehavior="single">
+    <!-- Grupo principal con comportamiento single check -->
+    <group android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/outline_home_24"
-            android:title="Home"/>
+            android:title="@string/nav_home" />
 
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/outline_settings_24"
-            android:title="Settings"/>
+            android:title="@string/nav_settings" />
 
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/outline_share_24"
-            android:title="Share"/>
+            android:title="@string/nav_share" />
 
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/outline_info_24"
-            android:title="About Us"/>
-    </group>
-    <item
-        android:title="">
+            android:title="@string/nav_about" />
 
+        <item
+            android:id="@+id/nav_sensores"
+            android:icon="@drawable/baseline_sensors_24"
+            android:title="@string/nav_sensores" />
+
+    </group>
+
+    <!-- Separador visual (línea sin items) -->
+    <item android:title="">
         <menu>
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/outline_exit_to_app_24"
-                android:title="Logout"/>
+                android:title="@string/nav_logout" />
         </menu>
 
     </item>
