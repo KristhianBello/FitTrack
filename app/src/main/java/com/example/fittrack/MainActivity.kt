@@ -1,12 +1,15 @@
 package com.example.fittrack
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,6 +18,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
+
+    // Auth Manager
+    private val authManager = AuthManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,9 +179,8 @@ class MainActivity : AppCompatActivity() {
                             android.widget.Toast.makeText(this, "Acerca de FitTrack v1.0", android.widget.Toast.LENGTH_SHORT).show()
                         }
                         R.id.nav_logout -> {
-                            // Implementar funcionalidad de logout
-                            android.widget.Toast.makeText(this, "Cerrando sesión...", android.widget.Toast.LENGTH_SHORT).show()
-                            finish()
+                            // Cerrar sesión y redirigir a LoginActivity
+                            performLogout()
                         }
                     }
                     drawerLayout.closeDrawers()
@@ -202,6 +207,36 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "Error configurando navegación: ${e.message}", e)
             throw e
+        }
+    }
+
+    private fun performLogout() {
+        android.widget.Toast.makeText(this, "Cerrando sesión...", android.widget.Toast.LENGTH_SHORT).show()
+
+        lifecycleScope.launch {
+            try {
+                // Cerrar sesión en Supabase
+                authManager.signOut()
+
+                // Redirigir a LoginActivity
+                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+
+                android.widget.Toast.makeText(
+                    this@MainActivity,
+                    "Sesión cerrada exitosamente",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            } catch (e: Exception) {
+                android.util.Log.e("MainActivity", "Error al cerrar sesión: ${e.message}", e)
+                android.widget.Toast.makeText(
+                    this@MainActivity,
+                    "Error al cerrar sesión",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

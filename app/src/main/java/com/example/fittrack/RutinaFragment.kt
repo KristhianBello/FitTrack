@@ -10,10 +10,9 @@ import android.widget.TextView
 import android.widget.ScrollView
 import android.widget.Toast
 import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.core.view.isVisible
 import com.google.android.material.textfield.TextInputEditText
 
 /**
@@ -31,8 +30,6 @@ class RutinaFragment : Fragment() {
     private lateinit var lineHistorial: View
     private lateinit var scrollMisRutinas: ScrollView
     private lateinit var scrollHistorial: ScrollView
-    private lateinit var recyclerViewRutinas: RecyclerView
-    private lateinit var fabAddRutina: FloatingActionButton
 
     // UI Components - Nueva Rutina
     private lateinit var cardNuevaRutina: CardView
@@ -70,8 +67,6 @@ class RutinaFragment : Fragment() {
         // Configurar pestañas
         setupTabs()
 
-        // Configurar FAB
-        setupFAB()
 
         // Configurar formulario de nueva rutina
         setupNuevaRutinaForm()
@@ -93,8 +88,6 @@ class RutinaFragment : Fragment() {
         lineHistorial = view.findViewById(R.id.lineHistorial)
         scrollMisRutinas = view.findViewById(R.id.scrollMisRutinas)
         scrollHistorial = view.findViewById(R.id.scrollHistorial)
-        recyclerViewRutinas = view.findViewById(R.id.recyclerViewRutinas)
-        fabAddRutina = view.findViewById(R.id.fabAddRutina)
 
         // Nueva Rutina
         cardNuevaRutina = view.findViewById(R.id.cardNuevaRutina)
@@ -116,11 +109,6 @@ class RutinaFragment : Fragment() {
         }
     }
 
-    private fun setupFAB() {
-        fabAddRutina.setOnClickListener {
-            mostrarFormularioNuevaRutina()
-        }
-    }
 
     private fun setupNuevaRutinaForm() {
         btnCancelarRutina.setOnClickListener {
@@ -165,17 +153,11 @@ class RutinaFragment : Fragment() {
     private fun mostrarFormularioNuevaRutina() {
         cardNuevaRutina.visibility = View.VISIBLE
         etNombreRutina.requestFocus()
-
-        // Ocultar temporalmente el FAB
-        fabAddRutina.hide()
     }
 
     private fun ocultarFormularioNuevaRutina() {
         cardNuevaRutina.visibility = View.GONE
         limpiarFormulario()
-
-        // Mostrar nuevamente el FAB
-        fabAddRutina.show()
     }
 
     private fun limpiarFormulario() {
@@ -250,7 +232,7 @@ class RutinaFragment : Fragment() {
             // Nota: Aquí deberías actualizar la lista de tarjetas visualmente
             // Por ahora, solo mostramos el mensaje de éxito
 
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             showToast("Por favor ingresa valores numéricos válidos")
         }
     }
@@ -270,10 +252,6 @@ class RutinaFragment : Fragment() {
         // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.VISIBLE
         scrollHistorial.visibility = View.GONE
-        recyclerViewRutinas.visibility = View.GONE
-
-        // Mostrar FAB solo en "Mis Rutinas"
-        fabAddRutina.show()
     }
 
     private fun showHistorialTab() {
@@ -291,13 +269,9 @@ class RutinaFragment : Fragment() {
         // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.GONE
         scrollHistorial.visibility = View.VISIBLE
-        recyclerViewRutinas.visibility = View.GONE
-
-        // Ocultar FAB en Historial
-        fabAddRutina.hide()
 
         // Ocultar formulario si está visible
-        if (cardNuevaRutina.visibility == View.VISIBLE) {
+        if (cardNuevaRutina.isVisible) {
             ocultarFormularioNuevaRutina()
         }
     }

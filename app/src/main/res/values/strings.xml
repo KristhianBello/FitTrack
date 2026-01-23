@@ -62,4 +62,24 @@
     <string name="sensor_acelerometro_z">Acelerómetro - Eje Z</string>
     <string name="sensor_no_disponible">Sensor no disponible</string>
 
+    <!-- Login Activity -->
+    <string name="login">Iniciar Sesión</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="no_account">¿No tienes cuenta?</string>
+    <string name="register">Regístrate</string>
+
+    <!-- Register Activity -->
+    <string name="create_account">Crear Cuenta</string>
+    <string name="register_subtitle">Únete a FitTrack y comienza tu transformación</string>
+    <string name="full_name">Nombre Completo</string>
+    <string name="confirm_password">Confirmar Contraseña</string>
+    <string name="accept_terms">Acepto los términos y condiciones</string>
+    <string name="already_have_account">¿Ya tienes cuenta?</string>
+    <string name="back">Atrás</string>
+
+    <!-- Login con Google -->
+    <string name="continue_with_google">Continuar con Google</string>
+
 </resources>

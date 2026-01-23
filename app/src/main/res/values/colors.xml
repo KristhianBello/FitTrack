@@ -42,4 +42,9 @@
     <color name="app_background">#C0C0C0</color>
     <color name="app_surface">#C0C0C0</color>
     <color name="app_surface_variant">#FFFFFF</color>
+
+    <!-- Colores para Login/Register -->
+    <color name="background_dark">#1A1A2E</color>
+    <color name="card_background">#16213E</color>
+    <color name="text_secondary">#94A3B8</color>
 </resources>
