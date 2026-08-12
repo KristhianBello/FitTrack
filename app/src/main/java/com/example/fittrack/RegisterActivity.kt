@@ -161,14 +161,25 @@ class RegisterActivity : AppCompatActivity() {
             btnRegister.text = getString(R.string.register)
             
             result.onSuccess {
-                Toast.makeText(
-                    this@RegisterActivity,
-                    "¡Registro exitoso! Revisa tu email para confirmar tu cuenta.",
-                    Toast.LENGTH_LONG
-                ).show()
-
-                // Volver a LoginActivity
-                finish()
+                if (authManager.isUserLoggedIn()) {
+                    FitTrackSdk.onAuthenticated(name)
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "¡Registro exitoso!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "¡Registro exitoso! Revisa tu email para confirmar tu cuenta.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    finish()
+                }
             }.onFailure { error ->
                 val errorMessage = when {
                     error.message?.contains("already registered", ignoreCase = true) == true ->

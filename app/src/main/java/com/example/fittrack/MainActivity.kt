@@ -20,9 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navigationView: NavigationView
     private lateinit var toolbar: Toolbar
 
-    // Auth Manager
-    private val authManager = FitTrackSdk.auth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,6 +45,8 @@ class MainActivity : AppCompatActivity() {
                 loadInitialFragment()
                 android.util.Log.d("MainActivity", "Fragment inicial cargado correctamente")
             }
+
+            restoreSessionIfNeeded()
 
             android.util.Log.d("MainActivity", "onCreate completado exitosamente")
         } catch (e: Exception) {
@@ -107,6 +106,14 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             android.util.Log.e("MainActivity", "Error configurando toolbar: ${e.message}", e)
             throw e
+        }
+    }
+
+    private fun restoreSessionIfNeeded() {
+        lifecycleScope.launch {
+            if (FitTrackSdk.auth.isUserLoggedIn() && FitTrackSdk.session.profile.value == null) {
+                FitTrackSdk.onAuthenticated()
+            }
         }
     }
 
@@ -217,7 +224,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 // Cerrar sesión en Supabase
-                authManager.signOut()
+                FitTrackSdk.signOut()
 
                 // Redirigir a LoginActivity
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)

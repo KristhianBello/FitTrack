@@ -1,6 +1,8 @@
 package com.example.fittrack.shared.domain
 
 data class WeightRecord(
-    val dateLabel: String,
+    val id: String,
+    val isoDate: String,
     val kilograms: Float,
+    val dateLabel: String,
 )

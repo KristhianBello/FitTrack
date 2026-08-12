@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.fittrack.shared.FitTrackSdk
 import com.example.fittrack.shared.domain.UserProfile
 import kotlinx.coroutines.launch
@@ -37,11 +38,9 @@ class ProfileFragment : Fragment() {
     private lateinit var llCerrarSesion: LinearLayout
 
     private var profile = UserProfile(
-        name = FitTrackSdk.auth.getCurrentUserEmail()?.substringBefore("@") ?: "Atleta",
+        id = "",
+        name = "Atleta",
         email = FitTrackSdk.auth.getCurrentUserEmail(),
-        totalWorkouts = 0,
-        streakRecord = 0,
-        activeHoursLabel = "0 hrs",
     )
 
     override fun onCreateView(
@@ -56,9 +55,18 @@ class ProfileFragment : Fragment() {
 
         // Inicializar vistas
         initViews(view)
-
-        // Configurar datos del usuario
         setupUserData()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
+                FitTrackSdk.session.profile.collect { loaded ->
+                    if (loaded != null) {
+                        profile = loaded
+                        setupUserData()
+                    }
+                }
+            }
+        }
 
         // Configurar listeners para las opciones
         setupOptionListeners()
@@ -114,7 +122,7 @@ class ProfileFragment : Fragment() {
         llCerrarSesion.setOnClickListener {
             showToast("Cerrando sesión...")
             viewLifecycleOwner.lifecycleScope.launch {
-                FitTrackSdk.auth.signOut()
+                FitTrackSdk.signOut()
                 val intent = Intent(requireContext(), LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

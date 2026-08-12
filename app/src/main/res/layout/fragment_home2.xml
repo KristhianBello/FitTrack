@@ -23,9 +23,10 @@
             android:layout_marginBottom="24dp">
 
             <TextView
+                android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¡Hola, Kazuto!"
+                android:text="¡Hola!"
                 android:textSize="32sp"
                 android:textColor="@color/track_night"
                 android:textStyle="bold"
@@ -91,9 +92,10 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tvProgressFraction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3/4"
+                            android:text="0"
                             android:textSize="28sp"
                             android:textColor="@color/fit_glow"
                             android:textStyle="bold" />
