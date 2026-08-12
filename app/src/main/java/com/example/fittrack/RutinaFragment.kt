@@ -19,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.fittrack.shared.FitTrackSdk
 import com.example.fittrack.shared.domain.FitnessValidator
 import com.example.fittrack.shared.domain.Routine
+import com.example.fittrack.shared.domain.WorkoutSession
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,7 @@ class RutinaFragment : Fragment() {
     private lateinit var scrollMisRutinas: ScrollView
     private lateinit var scrollHistorial: ScrollView
     private lateinit var containerRutinas: LinearLayout
+    private lateinit var containerHistorial: LinearLayout
     private lateinit var cardNuevaRutina: CardView
     private lateinit var etNombreRutina: TextInputEditText
     private lateinit var etDuracionRutina: TextInputEditText
@@ -54,7 +56,7 @@ class RutinaFragment : Fragment() {
         setupTabs()
         setupNuevaRutinaForm()
         showRutinasTab()
-        observeRoutines()
+        observeSession()
     }
 
     private fun initializeViews(view: View) {
@@ -67,6 +69,7 @@ class RutinaFragment : Fragment() {
         scrollMisRutinas = view.findViewById(R.id.scrollMisRutinas)
         scrollHistorial = view.findViewById(R.id.scrollHistorial)
         containerRutinas = view.findViewById(R.id.containerRutinas)
+        containerHistorial = view.findViewById(R.id.containerHistorial)
         cardNuevaRutina = view.findViewById(R.id.cardNuevaRutina)
         etNombreRutina = view.findViewById(R.id.etNombreRutina)
         etDuracionRutina = view.findViewById(R.id.etDuracionRutina)
@@ -77,11 +80,37 @@ class RutinaFragment : Fragment() {
         btnGuardarRutina = view.findViewById(R.id.btnGuardarRutina)
     }
 
-    private fun observeRoutines() {
+    private fun observeSession() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                FitTrackSdk.session.routines.collect { renderRoutines(it) }
+                launch {
+                    FitTrackSdk.session.routines.collect { renderRoutines(it) }
+                }
+                launch {
+                    FitTrackSdk.session.workouts.collect { renderWorkouts(it) }
+                }
             }
+        }
+    }
+
+    private fun renderWorkouts(workouts: List<WorkoutSession>) {
+        containerHistorial.removeAllViews()
+        if (workouts.isEmpty()) {
+            val empty = TextView(requireContext()).apply {
+                text = "Aún no hay entrenamientos. Inicia uno desde Inicio."
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.track_night))
+                textSize = 16f
+            }
+            containerHistorial.addView(empty)
+            return
+        }
+        val inflater = layoutInflater
+        workouts.forEach { workout ->
+            val card = inflater.inflate(R.layout.item_entrenamiento, containerHistorial, false)
+            card.findViewById<TextView>(R.id.tvWorkoutName).text = workout.routineName
+            val duration = workout.durationMinutes?.let { "$it min" } ?: "—"
+            card.findViewById<TextView>(R.id.tvWorkoutMeta).text = "${workout.dateLabel} • $duration"
+            containerHistorial.addView(card)
         }
     }
 

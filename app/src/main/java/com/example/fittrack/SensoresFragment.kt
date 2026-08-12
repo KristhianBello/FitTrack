@@ -14,6 +14,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.graphics.Color
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.domain.SensorKinds
+import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
 class SensoresFragment : Fragment(), SensorEventListener {
@@ -177,6 +181,7 @@ class SensoresFragment : Fragment(), SensorEventListener {
             android.util.Log.d("SensoresFragment", "¡SACUDIDA DETECTADA! Aceleración: $acceleration")
             isShaking = true
             lastShakeTime = currentTime
+            persistShake(acceleration)
 
             try {
                 // Cambiar el fondo del contenedor interno a ROJO
@@ -197,6 +202,16 @@ class SensoresFragment : Fragment(), SensorEventListener {
 
             cardShake.removeCallbacks(resetShakeRunnable)
             cardShake.postDelayed(resetShakeRunnable, 500)
+        }
+    }
+
+    private fun persistShake(acceleration: Float) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            FitTrackSdk.session.recordSensor(
+                kind = SensorKinds.SHAKE,
+                value = acceleration.toDouble(),
+                unit = "m/s²",
+            )
         }
     }
 

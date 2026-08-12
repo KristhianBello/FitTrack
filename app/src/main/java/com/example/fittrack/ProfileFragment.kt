@@ -59,10 +59,21 @@ class ProfileFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(androidx.lifecycle.Lifecycle.State.STARTED) {
-                FitTrackSdk.session.profile.collect { loaded ->
-                    if (loaded != null) {
-                        profile = loaded
-                        setupUserData()
+                launch {
+                    FitTrackSdk.session.profile.collect { loaded ->
+                        if (loaded != null) {
+                            profile = loaded
+                            setupUserData()
+                        }
+                    }
+                }
+                launch {
+                    FitTrackSdk.session.workouts.collect { workouts ->
+                        if (::tvTotalWorkouts.isInitialized) {
+                            tvTotalWorkouts.text = workouts.size.toString()
+                            val hours = workouts.sumOf { it.durationMinutes ?: 0 } / 60.0
+                            tvActiveHours.text = String.format("%.1f hrs", hours)
+                        }
                     }
                 }
             }

@@ -259,30 +259,11 @@
                 android:visibility="gone">
 
                 <LinearLayout
+                    android:id="@+id/containerHistorial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
-                        android:text="Historial de Entrenamientos"
-                        android:textColor="@color/track_night"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:alpha="0.7"
-                        android:text="Próximamente disponible"
-                        android:textColor="@color/track_night"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingBottom="80dp" />
 
             </ScrollView>
 
