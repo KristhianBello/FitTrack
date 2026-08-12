@@ -1,5 +1,6 @@
 package com.example.fittrack
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.domain.UserProfile
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,11 +36,13 @@ class ProfileFragment : Fragment() {
     private lateinit var llNotificaciones: LinearLayout
     private lateinit var llCerrarSesion: LinearLayout
 
-    // Datos del usuario (en una app real vendrían de SharedPreferences o base de datos)
-    private val userName = "Pako"
-    private val totalWorkouts = 85
-    private val streakRecord = 12
-    private val activeHours = "75 hrs"
+    private var profile = UserProfile(
+        name = FitTrackSdk.auth.getCurrentUserEmail()?.substringBefore("@") ?: "Atleta",
+        email = FitTrackSdk.auth.getCurrentUserEmail(),
+        totalWorkouts = 0,
+        streakRecord = 0,
+        activeHoursLabel = "0 hrs",
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,18 +81,15 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUserData() {
-        // Configurar nombre de usuario
-        tvUserName.text = userName
+        tvUserName.text = profile.name
 
-        // Configurar fecha de miembro (usando fecha actual como ejemplo)
         val dateFormat = SimpleDateFormat("MMM yyyy", Locale.getDefault())
         val memberDate = dateFormat.format(Date())
         tvMemberSince.text = "Miembro desde $memberDate"
 
-        // Configurar estadísticas con valores en Verde Neón
-        tvTotalWorkouts.text = totalWorkouts.toString()
-        tvStreakRecord.text = streakRecord.toString()
-        tvActiveHours.text = activeHours
+        tvTotalWorkouts.text = profile.totalWorkouts.toString()
+        tvStreakRecord.text = profile.streakRecord.toString()
+        tvActiveHours.text = profile.activeHoursLabel
     }
 
     private fun setupOptionListeners() {
@@ -107,10 +111,15 @@ class ProfileFragment : Fragment() {
             // En una implementación real, abriría configuración de notificaciones
         }
 
-        // Cerrar Sesión
         llCerrarSesion.setOnClickListener {
             showToast("Cerrando sesión...")
-            // En una implementación real, cerraría la sesión del usuario
+            viewLifecycleOwner.lifecycleScope.launch {
+                FitTrackSdk.auth.signOut()
+                val intent = Intent(requireContext(), LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                requireActivity().finish()
+            }
         }
     }
 
@@ -120,13 +129,18 @@ class ProfileFragment : Fragment() {
 
     // Métodos para actualizar estadísticas (útiles para futuras implementaciones)
     fun updateWorkoutCount(newCount: Int) {
-        totalWorkouts + newCount
-        tvTotalWorkouts.text = totalWorkouts.toString()
+        profile = profile.copy(totalWorkouts = newCount)
+        if (::tvTotalWorkouts.isInitialized) {
+            tvTotalWorkouts.text = profile.totalWorkouts.toString()
+        }
     }
 
     fun updateStreakRecord(newStreak: Int) {
-        if (newStreak > streakRecord) {
-            tvStreakRecord.text = newStreak.toString()
+        if (newStreak > profile.streakRecord) {
+            profile = profile.copy(streakRecord = newStreak)
+            if (::tvStreakRecord.isInitialized) {
+                tvStreakRecord.text = profile.streakRecord.toString()
+            }
         }
     }
 

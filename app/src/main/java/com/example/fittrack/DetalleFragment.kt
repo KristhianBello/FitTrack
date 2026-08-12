@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import com.example.fittrack.shared.domain.WeightRecord
 import com.google.android.material.textfield.TextInputEditText
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,10 +50,10 @@ class DetalleFragment : Fragment() {
 
     // Lista de registros (fecha, peso)
     private val registros = mutableListOf(
-        Pair("20 Nov 2024", 85.5f),
-        Pair("18 Nov 2024", 85.8f),
-        Pair("15 Nov 2024", 86.2f),
-        Pair("12 Nov 2024", 86.5f)
+        WeightRecord("20 Nov 2024", 85.5f),
+        WeightRecord("18 Nov 2024", 85.8f),
+        WeightRecord("15 Nov 2024", 86.2f),
+        WeightRecord("12 Nov 2024", 86.5f)
     )
 
     override fun onCreateView(
@@ -178,7 +179,7 @@ class DetalleFragment : Fragment() {
 
             // Agregar nuevo registro al inicio de la lista
             val fechaActual = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES")).format(Date())
-            registros.add(0, Pair(fechaActual, nuevoPeso))
+            registros.add(0, WeightRecord(fechaActual, nuevoPeso))
 
             // Mantener solo los últimos 4 registros
             if (registros.size > 4) {
@@ -208,7 +209,7 @@ class DetalleFragment : Fragment() {
 
         // Mostrar tarjeta con el peso actual
         mostrarTarjetaIngreso()
-        etNuevoPeso.setText(registro.second.toString())
+        etNuevoPeso.setText(registro.kilograms.toString())
         etNuevoPeso.selectAll()
 
         // Cambiar el comportamiento del botón guardar temporalmente
@@ -234,8 +235,8 @@ class DetalleFragment : Fragment() {
             }
 
             // Actualizar el registro
-            val fechaActual = registros[posicion].first
-            registros[posicion] = Pair(fechaActual, nuevoPeso)
+            val fechaActual = registros[posicion].dateLabel
+            registros[posicion] = WeightRecord(fechaActual, nuevoPeso)
 
             // Si es el primer registro, actualizar también el peso actual
             if (posicion == 0) {
@@ -264,26 +265,23 @@ class DetalleFragment : Fragment() {
     private fun actualizarRegistrosUI() {
         // Actualizar registro 1
         if (registros.size > 0) {
-            tvRegistro1Fecha.text = registros[0].first
-            tvRegistro1Peso.text = String.format("%.1f kg", registros[0].second)
+            tvRegistro1Fecha.text = registros[0].dateLabel
+            tvRegistro1Peso.text = String.format("%.1f kg", registros[0].kilograms)
         }
 
-        // Actualizar registro 2
         if (registros.size > 1) {
-            tvRegistro2Fecha.text = registros[1].first
-            tvRegistro2Peso.text = String.format("%.1f kg", registros[1].second)
+            tvRegistro2Fecha.text = registros[1].dateLabel
+            tvRegistro2Peso.text = String.format("%.1f kg", registros[1].kilograms)
         }
 
-        // Actualizar registro 3
         if (registros.size > 2) {
-            tvRegistro3Fecha.text = registros[2].first
-            tvRegistro3Peso.text = String.format("%.1f kg", registros[2].second)
+            tvRegistro3Fecha.text = registros[2].dateLabel
+            tvRegistro3Peso.text = String.format("%.1f kg", registros[2].kilograms)
         }
 
-        // Actualizar registro 4
         if (registros.size > 3) {
-            tvRegistro4Fecha.text = registros[3].first
-            tvRegistro4Peso.text = String.format("%.1f kg", registros[3].second)
+            tvRegistro4Fecha.text = registros[3].dateLabel
+            tvRegistro4Peso.text = String.format("%.1f kg", registros[3].kilograms)
         }
     }
 

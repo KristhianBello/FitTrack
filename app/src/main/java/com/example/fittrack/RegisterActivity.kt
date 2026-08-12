@@ -2,13 +2,14 @@ package com.example.fittrack
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.auth.AuthValidator
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -28,7 +29,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var cbTerms: CheckBox
     private lateinit var btnRegister: MaterialButton
     private lateinit var tvLogin: TextView
-    private val authManager = AuthManager()
+    private val authManager = FitTrackSdk.auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,55 +96,37 @@ class RegisterActivity : AppCompatActivity() {
     private fun validateInputs(): Boolean {
         var isValid = true
 
-        // Validar nombre
-        val name = etName.text.toString().trim()
-        if (name.isEmpty()) {
-            tilName.error = "El nombre es requerido"
-            isValid = false
-        } else if (name.length < 2) {
-            tilName.error = "El nombre debe tener al menos 2 caracteres"
+        val nameError = AuthValidator.nameError(etName.text.toString())
+        if (nameError != null) {
+            tilName.error = nameError
             isValid = false
         } else {
             tilName.error = null
         }
 
-        // Validar email
-        val email = etEmail.text.toString().trim()
-        if (email.isEmpty()) {
-            tilEmail.error = "El email es requerido"
-            isValid = false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tilEmail.error = "Email inválido"
+        val emailError = AuthValidator.emailError(etEmail.text.toString().trim())
+        if (emailError != null) {
+            tilEmail.error = emailError
             isValid = false
         } else {
             tilEmail.error = null
         }
 
-        // Validar contraseña
         val password = etPassword.text.toString()
-        if (password.isEmpty()) {
-            tilPassword.error = "La contraseña es requerida"
-            isValid = false
-        } else if (password.length < 6) {
-            tilPassword.error = "La contraseña debe tener al menos 6 caracteres"
-            isValid = false
-        } else if (!password.matches(".*[A-Z].*".toRegex())) {
-            tilPassword.error = "Debe contener al menos una mayúscula"
-            isValid = false
-        } else if (!password.matches(".*[0-9].*".toRegex())) {
-            tilPassword.error = "Debe contener al menos un número"
+        val passwordError = AuthValidator.passwordError(password, requireStrong = true)
+        if (passwordError != null) {
+            tilPassword.error = passwordError
             isValid = false
         } else {
             tilPassword.error = null
         }
 
-        // Validar confirmación de contraseña
-        val confirmPassword = etConfirmPassword.text.toString()
-        if (confirmPassword.isEmpty()) {
-            tilConfirmPassword.error = "Confirma tu contraseña"
-            isValid = false
-        } else if (password != confirmPassword) {
-            tilConfirmPassword.error = "Las contraseñas no coinciden"
+        val confirmError = AuthValidator.confirmPasswordError(
+            password,
+            etConfirmPassword.text.toString(),
+        )
+        if (confirmError != null) {
+            tilConfirmPassword.error = confirmError
             isValid = false
         } else {
             tilConfirmPassword.error = null

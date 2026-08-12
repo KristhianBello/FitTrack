@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import com.example.fittrack.shared.domain.Routine
 import com.google.android.material.textfield.TextInputEditText
 
 /**
@@ -37,15 +38,15 @@ class RutinaFragment : Fragment() {
     private lateinit var etDuracionRutina: TextInputEditText
     private lateinit var etCantidadEjercicios: TextInputEditText
     private lateinit var etFrecuenciaSemanal: TextInputEditText
+    private lateinit var btnNuevaRutina: Button
     private lateinit var btnCancelarRutina: Button
     private lateinit var btnGuardarRutina: Button
 
-    // Lista de rutinas (en memoria por ahora)
     private val rutinas = mutableListOf(
-        Rutina("Full Body Día 1", 30, 6, 3),
-        Rutina("Pecho y Tríceps", 45, 8, 2),
-        Rutina("Espalda y Bíceps", 40, 7, 2),
-        Rutina("Piernas Completas", 50, 9, 1)
+        Routine("Full Body Día 1", 30, 6, 3),
+        Routine("Pecho y Tríceps", 45, 8, 2),
+        Routine("Espalda y Bíceps", 40, 7, 2),
+        Routine("Piernas Completas", 50, 9, 1)
     )
 
     // Estado de las pestañas
@@ -95,6 +96,7 @@ class RutinaFragment : Fragment() {
         etDuracionRutina = view.findViewById(R.id.etDuracionRutina)
         etCantidadEjercicios = view.findViewById(R.id.etCantidadEjercicios)
         etFrecuenciaSemanal = view.findViewById(R.id.etFrecuenciaSemanal)
+        btnNuevaRutina = view.findViewById(R.id.btnNuevaRutina)
         btnCancelarRutina = view.findViewById(R.id.btnCancelarRutina)
         btnGuardarRutina = view.findViewById(R.id.btnGuardarRutina)
     }
@@ -111,6 +113,10 @@ class RutinaFragment : Fragment() {
 
 
     private fun setupNuevaRutinaForm() {
+        btnNuevaRutina.setOnClickListener {
+            mostrarFormularioNuevaRutina()
+        }
+
         btnCancelarRutina.setOnClickListener {
             ocultarFormularioNuevaRutina()
         }
@@ -142,7 +148,7 @@ class RutinaFragment : Fragment() {
             cardView.setOnClickListener {
                 if (index < rutinas.size) {
                     val rutina = rutinas[index]
-                    showToast("Abriendo '${rutina.nombre}'")
+                    showToast("Abriendo '${rutina.name}'")
                 } else {
                     showToast("Rutina próximamente disponible")
                 }
@@ -220,10 +226,9 @@ class RutinaFragment : Fragment() {
             }
 
             // Crear nueva rutina
-            val nuevaRutina = Rutina(nombre, duracion, ejercicios, frecuencia)
-            rutinas.add(0, nuevaRutina) // Agregar al inicio
+            val nuevaRutina = Routine(nombre, duracion, ejercicios, frecuencia)
+            rutinas.add(0, nuevaRutina)
 
-            // Actualizar UI (en una implementación real, se usaría RecyclerView)
             showToast("Rutina '$nombre' creada exitosamente")
 
             // Ocultar formulario
@@ -252,6 +257,7 @@ class RutinaFragment : Fragment() {
         // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.VISIBLE
         scrollHistorial.visibility = View.GONE
+        btnNuevaRutina.visibility = View.VISIBLE
     }
 
     private fun showHistorialTab() {
@@ -269,6 +275,7 @@ class RutinaFragment : Fragment() {
         // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.GONE
         scrollHistorial.visibility = View.VISIBLE
+        btnNuevaRutina.visibility = View.GONE
 
         // Ocultar formulario si está visible
         if (cardNuevaRutina.isVisible) {
@@ -279,16 +286,6 @@ class RutinaFragment : Fragment() {
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
-
-    /**
-     * Data class para representar una rutina
-     */
-    data class Rutina(
-        val nombre: String,
-        val duracionMinutos: Int,
-        val cantidadEjercicios: Int,
-        val frecuenciaSemanal: Int
-    )
 
     companion object {
         @JvmStatic

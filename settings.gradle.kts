@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "FitTrack"
 include(":app")
+include(":shared")
