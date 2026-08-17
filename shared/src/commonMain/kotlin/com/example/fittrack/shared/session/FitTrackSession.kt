@@ -77,6 +77,23 @@ class FitTrackSession(
         _sensorSamples.value = sensors.listRecent()
     }
 
+    suspend fun savePersonalData(
+        heightCm: Float,
+        currentWeightKg: Float,
+        goalWeightKg: Float,
+        birthIsoDate: String,
+        gender: String,
+    ): Result<UserProfile?> {
+        return runCatching {
+            profiles.savePersonalData(heightCm, goalWeightKg, birthIsoDate, gender)
+        }.onSuccess { updated ->
+            if (updated != null) _profile.value = updated
+            addWeight(currentWeightKg)
+        }.onFailure {
+            _status.value = it.message
+        }
+    }
+
     suspend fun addWeight(kilograms: Float): Result<WeightRecord> {
         return runCatching { weights.add(kilograms) }
             .onSuccess { refreshWeights() }

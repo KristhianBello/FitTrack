@@ -52,7 +52,9 @@ class LoginActivity : AppCompatActivity() {
     private fun goToMain() {
         lifecycleScope.launch {
             FitTrackSdk.onAuthenticated()
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            val hasPersonalData = FitTrackSdk.session.profile.value?.hasPersonalData == true
+            val destination = if (hasPersonalData) MainActivity::class.java else PersonalDataActivity::class.java
+            val intent = Intent(this@LoginActivity, destination)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()

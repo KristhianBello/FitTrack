@@ -82,4 +82,18 @@
     <!-- Login con Google -->
     <string name="continue_with_google">Continuar con Google</string>
 
+    <!-- Personal Data Activity -->
+    <string name="personal_data_title">Cuéntanos sobre ti</string>
+    <string name="personal_data_subtitle">Estos datos nos ayudan a llevar tu progreso con precisión</string>
+    <string name="birth_date">Fecha de nacimiento</string>
+    <string name="gender">Género</string>
+    <string name="gender_male">Masculino</string>
+    <string name="gender_female">Femenino</string>
+    <string name="gender_other">Otro</string>
+    <string name="gender_prefer_not_to_say">Prefiero no decir</string>
+    <string name="height_cm">Estatura (cm)</string>
+    <string name="current_weight_kg">Peso actual (kg)</string>
+    <string name="goal_weight_kg">Meta de peso (kg)</string>
+    <string name="save_and_continue">Guardar y continuar</string>
+
 </resources>

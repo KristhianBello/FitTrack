@@ -38,6 +38,12 @@
             android:exported="false"
             android:theme="@style/Base.Theme.FitTrack" />
 
+        <!-- Personal Data Activity - Onboarding de datos de progreso -->
+        <activity
+            android:name=".PersonalDataActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.FitTrack" />
+
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"

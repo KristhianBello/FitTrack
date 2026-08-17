@@ -3,6 +3,7 @@ package com.example.fittrack.shared.data
 import com.example.fittrack.shared.auth.AuthManager
 import com.example.fittrack.shared.config.SupabaseConfig
 import com.example.fittrack.shared.data.dto.ProfileDto
+import com.example.fittrack.shared.data.dto.ProfilePatchDto
 import com.example.fittrack.shared.data.schema.DbTables
 import com.example.fittrack.shared.domain.UserProfile
 import com.example.fittrack.shared.logError
@@ -67,11 +68,44 @@ class ProfileRepository(
         }
     }
 
+    suspend fun savePersonalData(
+        heightCm: Float,
+        goalWeightKg: Float,
+        birthIsoDate: String,
+        gender: String,
+    ): UserProfile? {
+        val userId = requireUserId()
+        val patch = ProfilePatchDto(
+            altura = heightCm.toDouble(),
+            pesoMeta = goalWeightKg.toDouble(),
+            fechaNacimiento = birthIsoDate,
+            genero = gender,
+        )
+        return SupabaseConfig.client.from(DbTables.PROFILES)
+            .update(patch) {
+                filter {
+                    eq("id", userId)
+                }
+                select()
+            }
+            .decodeList<ProfileDto>()
+            .firstOrNull()
+            ?.toDomain()
+    }
+
+    private fun requireUserId(): String {
+        return auth.getCurrentUser()?.id
+            ?: error("No hay sesión activa")
+    }
+
     private fun ProfileDto.toDomain() = UserProfile(
         id = id,
         name = name,
         email = email,
         goalKg = pesoMeta?.toFloat(),
+        heightCm = altura?.toFloat(),
+        birthDate = fechaNacimiento,
+        gender = genero,
     )
 
     private companion object {

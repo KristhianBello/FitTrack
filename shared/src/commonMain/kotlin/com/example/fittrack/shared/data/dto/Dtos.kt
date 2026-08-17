@@ -19,6 +19,14 @@ data class ProfileDto(
 )
 
 @Serializable
+data class ProfilePatchDto(
+    val altura: Double,
+    @SerialName("peso_meta") val pesoMeta: Double,
+    @SerialName("fecha_nacimiento") val fechaNacimiento: String,
+    val genero: String,
+)
+
+@Serializable
 data class WeightRecordDto(
     val id: String? = null,
     @SerialName("user_id") val userId: String,
