@@ -1,27 +1,30 @@
 package com.example.fittrack
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.ScrollView
-import android.widget.Toast
 import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.domain.FitnessValidator
+import com.example.fittrack.shared.domain.Routine
+import com.example.fittrack.shared.domain.WorkoutSession
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.launch
 
-/**
- * Fragment para gestión de rutinas de ejercicio
- * Incluye pestañas para "Mis Rutinas" e "Historial"
- */
 class RutinaFragment : Fragment() {
 
-    // UI Components - Tabs
     private lateinit var tabMisRutinas: LinearLayout
     private lateinit var tabHistorial: LinearLayout
     private lateinit var textMisRutinas: TextView
@@ -30,56 +33,33 @@ class RutinaFragment : Fragment() {
     private lateinit var lineHistorial: View
     private lateinit var scrollMisRutinas: ScrollView
     private lateinit var scrollHistorial: ScrollView
-
-    // UI Components - Nueva Rutina
+    private lateinit var containerRutinas: LinearLayout
+    private lateinit var containerHistorial: LinearLayout
     private lateinit var cardNuevaRutina: CardView
     private lateinit var etNombreRutina: TextInputEditText
     private lateinit var etDuracionRutina: TextInputEditText
     private lateinit var etCantidadEjercicios: TextInputEditText
     private lateinit var etFrecuenciaSemanal: TextInputEditText
+    private lateinit var btnNuevaRutina: Button
     private lateinit var btnCancelarRutina: Button
     private lateinit var btnGuardarRutina: Button
 
-    // Lista de rutinas (en memoria por ahora)
-    private val rutinas = mutableListOf(
-        Rutina("Full Body Día 1", 30, 6, 3),
-        Rutina("Pecho y Tríceps", 45, 8, 2),
-        Rutina("Espalda y Bíceps", 40, 7, 2),
-        Rutina("Piernas Completas", 50, 9, 1)
-    )
-
-    // Estado de las pestañas
-    private var isRutinasTabActive = true
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_rutina, container, false)
-    }
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View = inflater.inflate(R.layout.fragment_rutina, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Inicializar vistas
         initializeViews(view)
-
-        // Configurar pestañas
         setupTabs()
-
-
-        // Configurar formulario de nueva rutina
         setupNuevaRutinaForm()
-
-        // Configurar tarjetas de rutinas
-        setupRoutineCards(view)
-
-        // Mostrar pestaña inicial (Mis Rutinas)
         showRutinasTab()
+        observeSession()
     }
 
     private fun initializeViews(view: View) {
-        // Tabs
         tabMisRutinas = view.findViewById(R.id.tabMisRutinas)
         tabHistorial = view.findViewById(R.id.tabHistorial)
         textMisRutinas = view.findViewById(R.id.textMisRutinas)
@@ -88,66 +68,85 @@ class RutinaFragment : Fragment() {
         lineHistorial = view.findViewById(R.id.lineHistorial)
         scrollMisRutinas = view.findViewById(R.id.scrollMisRutinas)
         scrollHistorial = view.findViewById(R.id.scrollHistorial)
-
-        // Nueva Rutina
+        containerRutinas = view.findViewById(R.id.containerRutinas)
+        containerHistorial = view.findViewById(R.id.containerHistorial)
         cardNuevaRutina = view.findViewById(R.id.cardNuevaRutina)
         etNombreRutina = view.findViewById(R.id.etNombreRutina)
         etDuracionRutina = view.findViewById(R.id.etDuracionRutina)
         etCantidadEjercicios = view.findViewById(R.id.etCantidadEjercicios)
         etFrecuenciaSemanal = view.findViewById(R.id.etFrecuenciaSemanal)
+        btnNuevaRutina = view.findViewById(R.id.btnNuevaRutina)
         btnCancelarRutina = view.findViewById(R.id.btnCancelarRutina)
         btnGuardarRutina = view.findViewById(R.id.btnGuardarRutina)
     }
 
-    private fun setupTabs() {
-        tabMisRutinas.setOnClickListener {
-            showRutinasTab()
-        }
-
-        tabHistorial.setOnClickListener {
-            showHistorialTab()
+    private fun observeSession() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    FitTrackSdk.session.routines.collect { renderRoutines(it) }
+                }
+                launch {
+                    FitTrackSdk.session.workouts.collect { renderWorkouts(it) }
+                }
+            }
         }
     }
 
+    private fun renderWorkouts(workouts: List<WorkoutSession>) {
+        containerHistorial.removeAllViews()
+        if (workouts.isEmpty()) {
+            val empty = TextView(requireContext()).apply {
+                text = "Aún no hay entrenamientos. Inicia uno desde Inicio."
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.track_night))
+                textSize = 16f
+            }
+            containerHistorial.addView(empty)
+            return
+        }
+        val inflater = layoutInflater
+        workouts.forEach { workout ->
+            val card = inflater.inflate(R.layout.item_entrenamiento, containerHistorial, false)
+            card.findViewById<TextView>(R.id.tvWorkoutName).text = workout.routineName
+            val duration = workout.durationMinutes?.let { "$it min" } ?: "—"
+            card.findViewById<TextView>(R.id.tvWorkoutMeta).text = "${workout.dateLabel} • $duration"
+            containerHistorial.addView(card)
+        }
+    }
+
+    private fun renderRoutines(routines: List<Routine>) {
+        containerRutinas.removeAllViews()
+        if (routines.isEmpty()) {
+            val empty = TextView(requireContext()).apply {
+                text = "Aún no tienes rutinas. Crea la primera."
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.track_night))
+                textSize = 16f
+            }
+            containerRutinas.addView(empty)
+            return
+        }
+        val inflater = layoutInflater
+        routines.forEach { routine ->
+            val card = inflater.inflate(R.layout.item_rutina, containerRutinas, false)
+            card.findViewById<TextView>(R.id.tvRoutineName).text = routine.name
+            card.findViewById<TextView>(R.id.tvRoutineMeta).text =
+                "${routine.durationMinutes} min • ${routine.exerciseCount} Ejercicios"
+            card.findViewById<TextView>(R.id.tvRoutineFrequency).text =
+                "${routine.weeklyFrequency}x/Semana"
+            card.setOnClickListener { showToast("Abriendo '${routine.name}'") }
+            containerRutinas.addView(card)
+        }
+    }
+
+    private fun setupTabs() {
+        tabMisRutinas.setOnClickListener { showRutinasTab() }
+        tabHistorial.setOnClickListener { showHistorialTab() }
+    }
 
     private fun setupNuevaRutinaForm() {
-        btnCancelarRutina.setOnClickListener {
-            ocultarFormularioNuevaRutina()
-        }
-
-        btnGuardarRutina.setOnClickListener {
-            guardarNuevaRutina()
-        }
-    }
-
-    private fun setupRoutineCards(view: View) {
-        // Configurar clicks en las tarjetas de rutinas existentes
-        val routineCards = mutableListOf<CardView>()
-
-        // Buscar todas las CardView en el scrollMisRutinas
-        val scrollView = view.findViewById<ScrollView>(R.id.scrollMisRutinas)
-        val linearLayout = scrollView.getChildAt(0) as? LinearLayout
-
-        linearLayout?.let { container ->
-            for (i in 0 until container.childCount) {
-                val child = container.getChildAt(i)
-                if (child is CardView) {
-                    routineCards.add(child)
-                }
-            }
-        }
-
-        // Configurar listeners para cada tarjeta
-        routineCards.forEachIndexed { index, cardView ->
-            cardView.setOnClickListener {
-                if (index < rutinas.size) {
-                    val rutina = rutinas[index]
-                    showToast("Abriendo '${rutina.nombre}'")
-                } else {
-                    showToast("Rutina próximamente disponible")
-                }
-            }
-        }
+        btnNuevaRutina.setOnClickListener { mostrarFormularioNuevaRutina() }
+        btnCancelarRutina.setOnClickListener { ocultarFormularioNuevaRutina() }
+        btnGuardarRutina.setOnClickListener { guardarNuevaRutina() }
     }
 
     private fun mostrarFormularioNuevaRutina() {
@@ -157,10 +156,6 @@ class RutinaFragment : Fragment() {
 
     private fun ocultarFormularioNuevaRutina() {
         cardNuevaRutina.visibility = View.GONE
-        limpiarFormulario()
-    }
-
-    private fun limpiarFormulario() {
         etNombreRutina.text?.clear()
         etDuracionRutina.text?.clear()
         etCantidadEjercicios.text?.clear()
@@ -169,108 +164,57 @@ class RutinaFragment : Fragment() {
 
     private fun guardarNuevaRutina() {
         val nombre = etNombreRutina.text.toString().trim()
-        val duracionStr = etDuracionRutina.text.toString().trim()
-        val ejerciciosStr = etCantidadEjercicios.text.toString().trim()
-        val frecuenciaStr = etFrecuenciaSemanal.text.toString().trim()
-
-        // Validaciones
-        if (nombre.isEmpty()) {
-            showToast("Por favor ingresa el nombre de la rutina")
+        val nameError = FitnessValidator.routineNameError(nombre)
+        if (nameError != null) {
+            showToast(nameError)
             etNombreRutina.requestFocus()
             return
         }
-
-        if (duracionStr.isEmpty()) {
-            showToast("Por favor ingresa la duración")
-            etDuracionRutina.requestFocus()
-            return
-        }
-
-        if (ejerciciosStr.isEmpty()) {
-            showToast("Por favor ingresa la cantidad de ejercicios")
-            etCantidadEjercicios.requestFocus()
-            return
-        }
-
-        if (frecuenciaStr.isEmpty()) {
-            showToast("Por favor ingresa la frecuencia semanal")
-            etFrecuenciaSemanal.requestFocus()
-            return
-        }
-
-        try {
-            val duracion = duracionStr.toInt()
-            val ejercicios = ejerciciosStr.toInt()
-            val frecuencia = frecuenciaStr.toInt()
-
-            // Validar rangos
-            if (duracion <= 0 || duracion > 300) {
-                showToast("La duración debe estar entre 1 y 300 minutos")
-                return
-            }
-
-            if (ejercicios <= 0 || ejercicios > 50) {
-                showToast("La cantidad de ejercicios debe estar entre 1 y 50")
-                return
-            }
-
-            if (frecuencia <= 0 || frecuencia > 7) {
-                showToast("La frecuencia debe estar entre 1 y 7 veces por semana")
-                return
-            }
-
-            // Crear nueva rutina
-            val nuevaRutina = Rutina(nombre, duracion, ejercicios, frecuencia)
-            rutinas.add(0, nuevaRutina) // Agregar al inicio
-
-            // Actualizar UI (en una implementación real, se usaría RecyclerView)
-            showToast("Rutina '$nombre' creada exitosamente")
-
-            // Ocultar formulario
-            ocultarFormularioNuevaRutina()
-
-            // Nota: Aquí deberías actualizar la lista de tarjetas visualmente
-            // Por ahora, solo mostramos el mensaje de éxito
-
-        } catch (_: NumberFormatException) {
+        val duracion = etDuracionRutina.text.toString().toIntOrNull()
+        val ejercicios = etCantidadEjercicios.text.toString().toIntOrNull()
+        val frecuencia = etFrecuenciaSemanal.text.toString().toIntOrNull()
+        if (duracion == null || ejercicios == null || frecuencia == null) {
             showToast("Por favor ingresa valores numéricos válidos")
+            return
+        }
+        FitnessValidator.durationError(duracion)?.let { showToast(it); return }
+        FitnessValidator.exerciseCountError(ejercicios)?.let { showToast(it); return }
+        FitnessValidator.weeklyFrequencyError(frecuencia)?.let { showToast(it); return }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            FitTrackSdk.session.addRoutine(nombre, duracion, ejercicios, frecuencia)
+                .onSuccess {
+                    showToast("Rutina '$nombre' creada")
+                    ocultarFormularioNuevaRutina()
+                }
+                .onFailure {
+                    showToast(it.message ?: "No se pudo crear la rutina")
+                }
         }
     }
 
     private fun showRutinasTab() {
-        isRutinasTabActive = true
-
-        // Actualizar estilos de pestañas
         textMisRutinas.setTextColor(ContextCompat.getColor(requireContext(), R.color.fit_glow))
         textMisRutinas.alpha = 1f
         lineMisRutinas.visibility = View.VISIBLE
-
         textHistorial.setTextColor(ContextCompat.getColor(requireContext(), R.color.track_night))
         textHistorial.alpha = 0.6f
         lineHistorial.visibility = View.INVISIBLE
-
-        // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.VISIBLE
         scrollHistorial.visibility = View.GONE
+        btnNuevaRutina.visibility = View.VISIBLE
     }
 
     private fun showHistorialTab() {
-        isRutinasTabActive = false
-
-        // Actualizar estilos de pestañas
         textHistorial.setTextColor(ContextCompat.getColor(requireContext(), R.color.fit_glow))
         textHistorial.alpha = 1f
         lineHistorial.visibility = View.VISIBLE
-
         textMisRutinas.setTextColor(ContextCompat.getColor(requireContext(), R.color.track_night))
         textMisRutinas.alpha = 0.6f
         lineMisRutinas.visibility = View.INVISIBLE
-
-        // Mostrar contenido correspondiente
         scrollMisRutinas.visibility = View.GONE
         scrollHistorial.visibility = View.VISIBLE
-
-        // Ocultar formulario si está visible
+        btnNuevaRutina.visibility = View.GONE
         if (cardNuevaRutina.isVisible) {
             ocultarFormularioNuevaRutina()
         }
@@ -280,19 +224,8 @@ class RutinaFragment : Fragment() {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    /**
-     * Data class para representar una rutina
-     */
-    data class Rutina(
-        val nombre: String,
-        val duracionMinutos: Int,
-        val cantidadEjercicios: Int,
-        val frecuenciaSemanal: Int
-    )
-
     companion object {
         @JvmStatic
         fun newInstance() = RutinaFragment()
     }
 }
-

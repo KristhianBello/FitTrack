@@ -1,6 +1,19 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+fun quotedProperty(name: String, fallback: String): String {
+    val value = localProperties.getProperty(name) ?: fallback
+    return "\"${value.replace("\\", "\\\\").replace("\"", "\\\"")}\""
 }
 
 android {
@@ -15,6 +28,23 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField(
+            "String",
+            "SUPABASE_URL",
+            quotedProperty(
+                "SUPABASE_URL",
+                "https://dpwelxavdsrswunzkfct.supabase.co",
+            ),
+        )
+        buildConfigField(
+            "String",
+            "SUPABASE_ANON_KEY",
+            quotedProperty(
+                "SUPABASE_ANON_KEY",
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRwd2VseGF2ZHNyc3d1bnprZmN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxNDY2MDQsImV4cCI6MjA4NDcyMjYwNH0.XENUvdTasSEUTfMyGePhADsHjVrFS_cFyPQddqL0L6Q",
+            ),
+        )
     }
 
     buildTypes {
@@ -39,34 +69,19 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("androidx.drawerlayout:drawerlayout:1.1.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
-    
-    // Supabase
-    implementation(platform("io.github.jan-tennert.supabase:bom:2.0.0"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt")
-    
-    // Ktor para networking
-    implementation("io.ktor:ktor-client-android:2.3.7")
-    implementation("io.ktor:ktor-client-core:2.3.7")
-    implementation("io.ktor:ktor-utils:2.3.7")
-    
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    
-    // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    
-    // Google Play Services para Google Sign-In
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation(libs.androidx.drawerlayout)
+    implementation(libs.androidx.fragment)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.play.services.auth)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

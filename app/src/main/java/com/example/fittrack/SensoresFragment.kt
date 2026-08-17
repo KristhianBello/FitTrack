@@ -12,8 +12,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.graphics.Color
 import androidx.cardview.widget.CardView
+import androidx.lifecycle.lifecycleScope
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.domain.SensorKinds
+import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
 class SensoresFragment : Fragment(), SensorEventListener {
@@ -177,17 +180,18 @@ class SensoresFragment : Fragment(), SensorEventListener {
             android.util.Log.d("SensoresFragment", "¡SACUDIDA DETECTADA! Aceleración: $acceleration")
             isShaking = true
             lastShakeTime = currentTime
+            persistShake(acceleration)
 
             try {
                 // Cambiar el fondo del contenedor interno a ROJO
-                shakeContainer.setBackgroundColor(Color.parseColor("#FF0000"))
+                shakeContainer.setBackgroundColor(FitTrackColor.shakeAlertBackground)
 
                 // Cambiar textos a BLANCO con tamaño más grande para asegurar visibilidad
-                textShakeTitle.setTextColor(Color.WHITE)
+                textShakeTitle.setTextColor(FitTrackColor.white)
                 textShakeTitle.textSize = 20f
 
                 textShake.text = "¡SACUDIDA DETECTADA! 🚀"
-                textShake.setTextColor(Color.WHITE)
+                textShake.setTextColor(FitTrackColor.white)
                 textShake.textSize = 16f
 
                 android.util.Log.d("SensoresFragment", "Color rojo aplicado")
@@ -200,18 +204,28 @@ class SensoresFragment : Fragment(), SensorEventListener {
         }
     }
 
+    private fun persistShake(acceleration: Float) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            FitTrackSdk.session.recordSensor(
+                kind = SensorKinds.SHAKE,
+                value = acceleration.toDouble(),
+                unit = "m/s²",
+            )
+        }
+    }
+
     private val resetShakeRunnable = Runnable {
         isShaking = false
         try {
             // Resetear el fondo del contenedor a BLANCO
-            shakeContainer.setBackgroundColor(Color.parseColor("#FFFFFFFF"))
+            shakeContainer.setBackgroundColor(FitTrackColor.white)
 
             // Resetear textos a sus colores y tamaños originales
-            textShakeTitle.setTextColor(Color.parseColor("#FF000000"))
+            textShakeTitle.setTextColor(FitTrackColor.black)
             textShakeTitle.textSize = 18f
 
             textShake.text = "Agita tu dispositivo..."
-            textShake.setTextColor(Color.parseColor("#FF333333"))
+            textShake.setTextColor(FitTrackColor.shakeIdleBodyText)
             textShake.textSize = 14f
 
             android.util.Log.d("SensoresFragment", "Color reseteado a blanco")

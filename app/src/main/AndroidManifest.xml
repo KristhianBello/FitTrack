@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
+        android:name=".FitTrackApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -34,6 +35,12 @@
         <!-- Register Activity -->
         <activity
             android:name=".RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Base.Theme.FitTrack" />
+
+        <!-- Personal Data Activity - Onboarding de datos de progreso -->
+        <activity
+            android:name=".PersonalDataActivity"
             android:exported="false"
             android:theme="@style/Base.Theme.FitTrack" />
 

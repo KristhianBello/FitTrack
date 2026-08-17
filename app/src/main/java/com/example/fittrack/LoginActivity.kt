@@ -2,11 +2,12 @@ package com.example.fittrack
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.fittrack.shared.FitTrackSdk
+import com.example.fittrack.shared.auth.AuthValidator
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -23,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnGoogleLogin: MaterialButton
     private lateinit var tvRegister: TextView
     private lateinit var tvForgotPassword: TextView
-    private val authManager = AuthManager()
+    private val authManager = FitTrackSdk.auth
     private lateinit var googleSignInHelper: GoogleSignInHelper
 
     // Launcher para Google Sign-In
@@ -37,14 +38,27 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Inicializar Google Sign-In Helper
         googleSignInHelper = GoogleSignInHelper(this)
 
-        // Inicializar vistas
-        initViews()
+        if (authManager.isUserLoggedIn()) {
+            goToMain()
+            return
+        }
 
-        // Configurar listeners
+        initViews()
         setupListeners()
+    }
+
+    private fun goToMain() {
+        lifecycleScope.launch {
+            FitTrackSdk.onAuthenticated()
+            val hasPersonalData = FitTrackSdk.session.profile.value?.hasPersonalData == true
+            val destination = if (hasPersonalData) MainActivity::class.java else PersonalDataActivity::class.java
+            val intent = Intent(this@LoginActivity, destination)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun initViews() {
@@ -99,25 +113,17 @@ class LoginActivity : AppCompatActivity() {
     private fun validateInputs(): Boolean {
         var isValid = true
 
-        // Validar email
-        val email = etEmail.text.toString().trim()
-        if (email.isEmpty()) {
-            tilEmail.error = "El email es requerido"
-            isValid = false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            tilEmail.error = "Email inválido"
+        val emailError = AuthValidator.emailError(etEmail.text.toString().trim())
+        if (emailError != null) {
+            tilEmail.error = emailError
             isValid = false
         } else {
             tilEmail.error = null
         }
 
-        // Validar contraseña
-        val password = etPassword.text.toString()
-        if (password.isEmpty()) {
-            tilPassword.error = "La contraseña es requerida"
-            isValid = false
-        } else if (password.length < 6) {
-            tilPassword.error = "La contraseña debe tener al menos 6 caracteres"
+        val passwordError = AuthValidator.passwordError(etPassword.text.toString())
+        if (passwordError != null) {
+            tilPassword.error = passwordError
             isValid = false
         } else {
             tilPassword.error = null
@@ -147,11 +153,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                // Navegar a MainActivity
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
+                goToMain()
             }.onFailure { error ->
                 val errorMessage = when {
                     error.message?.contains("Invalid login credentials") == true ->
@@ -217,26 +219,13 @@ class LoginActivity : AppCompatActivity() {
                 // Autenticar con Supabase usando el ID Token
                 performGoogleSignIn(idToken)
             } else {
-                // ID Token es null = problema de configuración
                 btnGoogleLogin.isEnabled = true
-                android.util.Log.e("LoginActivity", "❌ ID Token NULL - Problema de configuración")
-                android.util.Log.e("LoginActivity", "SHA-1 no configurado en Google Cloud Console")
-
+                android.util.Log.e("LoginActivity", "ID Token NULL — no se entra sin sesión de Supabase")
                 Toast.makeText(
                     this,
-                    "⚠️ Configuración incompleta\n\n" +
-                    "Google detectó: ${account.email}\n" +
-                    "Pero falta SHA-1 en Google Cloud Console\n\n" +
-                    "MODO PRUEBA: Entrando sin Supabase...",
+                    "Google no entregó un token. Revisa el Web Client ID y el SHA-1 en Google Cloud Console.",
                     Toast.LENGTH_LONG
                 ).show()
-
-                // MODO PRUEBA: Navegar sin Supabase
-                android.util.Log.d("LoginActivity", "MODO PRUEBA: Sin autenticación Supabase")
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
             }
         } else {
             btnGoogleLogin.isEnabled = true
@@ -266,11 +255,7 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                // Navegar a MainActivity
-                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
+                goToMain()
             }.onFailure { error ->
                 Toast.makeText(
                     this@LoginActivity,

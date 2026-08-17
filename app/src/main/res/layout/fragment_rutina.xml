@@ -90,6 +90,15 @@
 
         </LinearLayout>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNuevaRutina"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/fab_agregar_rutina" />
+
         <!-- Tarjeta para Agregar Nueva Rutina (inicialmente oculta) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardNuevaRutina"
@@ -232,249 +241,11 @@
                 android:visibility="visible">
 
                 <LinearLayout
+                    android:id="@+id/containerRutinas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Tarjeta Rutina 1 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="@color/clean_stat"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="20dp">
-
-                            <!-- Información principal -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="4dp"
-                                    android:text="Full Body Día 1"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.7"
-                                    android:text="30 min • 6 Ejercicios"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="14sp" />
-
-                            </LinearLayout>
-
-                            <!-- Indicador frecuencia -->
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/frequency_badge"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"
-                                android:text="3x/Semana"
-                                android:textColor="@color/fit_glow"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tarjeta Rutina 2 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="@color/clean_stat"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="20dp">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="4dp"
-                                    android:text="Pecho y Tríceps"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.7"
-                                    android:text="45 min • 8 Ejercicios"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="14sp" />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/frequency_badge"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"
-                                android:text="2x/Semana"
-                                android:textColor="@color/fit_glow"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tarjeta Rutina 3 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="@color/clean_stat"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="20dp">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="4dp"
-                                    android:text="Espalda y Bíceps"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.7"
-                                    android:text="40 min • 7 Ejercicios"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="14sp" />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/frequency_badge"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"
-                                android:text="2x/Semana"
-                                android:textColor="@color/fit_glow"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Tarjeta Rutina 4 -->
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="80dp"
-                        android:backgroundTint="@color/clean_stat"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="20dp">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="4dp"
-                                    android:text="Piernas Completas"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:alpha="0.7"
-                                    android:text="50 min • 9 Ejercicios"
-                                    android:textColor="@color/track_night"
-                                    android:textSize="14sp" />
-
-                            </LinearLayout>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:background="@drawable/frequency_badge"
-                                android:paddingHorizontal="12dp"
-                                android:paddingVertical="6dp"
-                                android:text="1x/Semana"
-                                android:textColor="@color/fit_glow"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingBottom="80dp" />
 
             </ScrollView>
 
@@ -488,30 +259,11 @@
                 android:visibility="gone">
 
                 <LinearLayout
+                    android:id="@+id/containerHistorial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
-                        android:text="Historial de Entrenamientos"
-                        android:textColor="@color/track_night"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:alpha="0.7"
-                        android:text="Próximamente disponible"
-                        android:textColor="@color/track_night"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingBottom="80dp" />
 
             </ScrollView>
 

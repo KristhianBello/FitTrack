@@ -23,9 +23,10 @@
             android:layout_marginBottom="24dp">
 
             <TextView
+                android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¡Hola, Kazuto!"
+                android:text="¡Hola!"
                 android:textSize="32sp"
                 android:textColor="@color/track_night"
                 android:textStyle="bold"
@@ -91,17 +92,19 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tvProgressFraction"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3/4"
+                            android:text="0"
                             android:textSize="28sp"
                             android:textColor="@color/fit_glow"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvProgressPercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="75%"
+                            android:text="0%"
                             android:textSize="14sp"
                             android:textColor="@color/progress_neon"
                             android:textStyle="bold" />
@@ -151,18 +154,20 @@
                     android:layout_marginBottom="12dp" />
 
                 <TextView
+                    android:id="@+id/tvTodayRoutineName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rutina de Pierna Explosiva"
+                    android:text="Crea tu primera rutina"
                     android:textSize="18sp"
                     android:textColor="@color/fit_glow"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
+                    android:id="@+id/tvTodayRoutineMeta"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="45 min • 8 Ejercicios"
+                    android:text="Aún no hay entrenamiento programado"
                     android:textSize="14sp"
                     android:textColor="@color/track_night"
                     android:alpha="0.7" />
