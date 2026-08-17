@@ -14,6 +14,13 @@ internal actual fun todayIsoDate(): String {
     return formatter.stringFromDate(NSDate())
 }
 
+internal actual fun nowIsoTimestamp(): String {
+    val formatter = NSDateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+    formatter.locale = NSLocale(localeIdentifier = "en_US_POSIX")
+    return formatter.stringFromDate(NSDate())
+}
+
 internal actual fun isoDateDaysAgo(days: Int): String {
     val calendar = platform.Foundation.NSCalendar.currentCalendar
     val date = calendar.dateByAddingUnit(

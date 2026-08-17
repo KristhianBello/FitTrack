@@ -173,11 +173,6 @@ class MainActivity : AppCompatActivity() {
                                 .commit()
                             bottomNavigationView.selectedItemId = R.id.nav_profile
                         }
-                        R.id.nav_sensores -> {
-                            supportFragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout, SensoresFragment())
-                                .commit()
-                        }
                         R.id.nav_share -> {
                             // Implementar funcionalidad de compartir
                             android.widget.Toast.makeText(this, "Funcionalidad de compartir próximamente", android.widget.Toast.LENGTH_SHORT).show()
@@ -185,6 +180,11 @@ class MainActivity : AppCompatActivity() {
                         R.id.nav_about -> {
                             // Implementar pantalla de About Us
                             android.widget.Toast.makeText(this, "Acerca de FitTrack v1.0", android.widget.Toast.LENGTH_SHORT).show()
+                        }
+                        R.id.nav_calendario -> {
+                            supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout, CalendarioFragment())
+                                .commit()
                         }
                         R.id.nav_logout -> {
                             // Cerrar sesión y redirigir a LoginActivity

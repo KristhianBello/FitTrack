@@ -11,6 +11,11 @@ internal actual fun todayIsoDate(): String {
     return SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
 }
 
+internal actual fun nowIsoTimestamp(): String {
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+    return formatter.format(Date())
+}
+
 internal actual fun isoDateDaysAgo(days: Int): String {
     val calendar = java.util.Calendar.getInstance()
     calendar.add(java.util.Calendar.DAY_OF_YEAR, -days)

@@ -9,4 +9,5 @@ data class WorkoutSession(
     val isoTimestamp: String,
     val dateLabel: String,
     val completed: Boolean,
+    val category: String? = null,
 )

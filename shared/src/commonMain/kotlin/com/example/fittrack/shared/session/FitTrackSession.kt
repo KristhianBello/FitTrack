@@ -1,12 +1,14 @@
 package com.example.fittrack.shared.session
 
+import com.example.fittrack.shared.data.ExerciseRepository
 import com.example.fittrack.shared.data.ProfileRepository
+import com.example.fittrack.shared.data.RoutineExerciseRepository
 import com.example.fittrack.shared.data.RoutineRepository
-import com.example.fittrack.shared.data.SensorRepository
 import com.example.fittrack.shared.data.WeightRepository
 import com.example.fittrack.shared.data.WorkoutHistoryRepository
+import com.example.fittrack.shared.domain.Exercise
 import com.example.fittrack.shared.domain.Routine
-import com.example.fittrack.shared.domain.SensorSample
+import com.example.fittrack.shared.domain.RoutineExercise
 import com.example.fittrack.shared.domain.UserProfile
 import com.example.fittrack.shared.domain.WeightRecord
 import com.example.fittrack.shared.domain.WorkoutSession
@@ -21,7 +23,8 @@ class FitTrackSession(
     private val weights: WeightRepository,
     private val routineRepository: RoutineRepository,
     private val workoutHistory: WorkoutHistoryRepository,
-    private val sensors: SensorRepository,
+    private val exerciseRepository: ExerciseRepository,
+    private val routineExerciseRepository: RoutineExerciseRepository,
 ) {
     private val _profile = MutableStateFlow<UserProfile?>(null)
     val profile: StateFlow<UserProfile?> = _profile.asStateFlow()
@@ -35,8 +38,8 @@ class FitTrackSession(
     private val _workouts = MutableStateFlow<List<WorkoutSession>>(emptyList())
     val workouts: StateFlow<List<WorkoutSession>> = _workouts.asStateFlow()
 
-    private val _sensorSamples = MutableStateFlow<List<SensorSample>>(emptyList())
-    val sensorSamples: StateFlow<List<SensorSample>> = _sensorSamples.asStateFlow()
+    private val _exercises = MutableStateFlow<List<Exercise>>(emptyList())
+    val exercises: StateFlow<List<Exercise>> = _exercises.asStateFlow()
 
     private val _status = MutableStateFlow<String?>(null)
     val status: StateFlow<String?> = _status.asStateFlow()
@@ -58,7 +61,7 @@ class FitTrackSession(
         refreshWeights()
         refreshRoutines()
         refreshWorkouts()
-        refreshSensors()
+        refreshExercises()
     }
 
     suspend fun refreshWeights() {
@@ -73,8 +76,12 @@ class FitTrackSession(
         _workouts.value = workoutHistory.list(_routines.value)
     }
 
-    suspend fun refreshSensors() {
-        _sensorSamples.value = sensors.listRecent()
+    suspend fun refreshExercises() {
+        _exercises.value = exerciseRepository.list()
+    }
+
+    suspend fun routineExercises(routineId: String): List<RoutineExercise> {
+        return routineExerciseRepository.listForRoutine(routineId, _exercises.value)
     }
 
     suspend fun savePersonalData(
@@ -109,11 +116,14 @@ class FitTrackSession(
     suspend fun addRoutine(
         name: String,
         durationMinutes: Int,
-        exerciseCount: Int,
         weeklyFrequency: Int,
+        category: String,
+        exerciseIds: List<String>,
     ): Result<Routine> {
         return runCatching {
-            routineRepository.add(name, durationMinutes, exerciseCount, weeklyFrequency)
+            val created = routineRepository.add(name, durationMinutes, exerciseIds.size, weeklyFrequency, category)
+            routineExerciseRepository.insertAll(created.id, exerciseIds, _exercises.value)
+            created
         }.onSuccess {
             refreshRoutines()
         }.onFailure {
@@ -128,21 +138,13 @@ class FitTrackSession(
             .onFailure { _status.value = it.message }
     }
 
-    suspend fun recordSensor(kind: String, value: Double, unit: String?): Result<SensorSample> {
-        return runCatching { sensors.record(kind, value, unit) }
-            .onSuccess { refreshSensors() }
-            .onFailure { _status.value = it.message }
-    }
-
     fun clear() {
         _profile.value = null
         _weightRecords.value = emptyList()
         _routines.value = emptyList()
         _workouts.value = emptyList()
-        _sensorSamples.value = emptyList()
         weights.clear()
         routineRepository.clear()
         workoutHistory.clear()
-        sensors.clear()
     }
 }

@@ -9,7 +9,6 @@ object DbTables {
     const val EXERCISES = "exercises"
     const val ROUTINES = "routines"
     const val ROUTINE_EXERCISES = "routine_exercises"
-    const val SENSOR_DATA = "sensor_data"
     const val WEIGHT_RECORDS = "weight_records"
     const val WORKOUT_HISTORY = "workout_history"
 }

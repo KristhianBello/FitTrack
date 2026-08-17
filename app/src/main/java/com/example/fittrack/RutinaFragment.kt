@@ -1,14 +1,18 @@
 package com.example.fittrack
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.RadioGroup
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -19,6 +23,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.fittrack.shared.FitTrackSdk
 import com.example.fittrack.shared.domain.FitnessValidator
 import com.example.fittrack.shared.domain.Routine
+import com.example.fittrack.shared.domain.RoutineCategory
 import com.example.fittrack.shared.domain.WorkoutSession
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
@@ -38,11 +43,18 @@ class RutinaFragment : Fragment() {
     private lateinit var cardNuevaRutina: CardView
     private lateinit var etNombreRutina: TextInputEditText
     private lateinit var etDuracionRutina: TextInputEditText
-    private lateinit var etCantidadEjercicios: TextInputEditText
+    private lateinit var rgCategoriaRutina: RadioGroup
+    private lateinit var btnElegirEjercicios: Button
     private lateinit var etFrecuenciaSemanal: TextInputEditText
     private lateinit var btnNuevaRutina: Button
     private lateinit var btnCancelarRutina: Button
     private lateinit var btnGuardarRutina: Button
+
+    private var selectedExerciseIds: List<String> = emptyList()
+
+    private val exercisePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result -> handleExercisePickerResult(result) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,7 +85,8 @@ class RutinaFragment : Fragment() {
         cardNuevaRutina = view.findViewById(R.id.cardNuevaRutina)
         etNombreRutina = view.findViewById(R.id.etNombreRutina)
         etDuracionRutina = view.findViewById(R.id.etDuracionRutina)
-        etCantidadEjercicios = view.findViewById(R.id.etCantidadEjercicios)
+        rgCategoriaRutina = view.findViewById(R.id.rgCategoriaRutina)
+        btnElegirEjercicios = view.findViewById(R.id.btnElegirEjercicios)
         etFrecuenciaSemanal = view.findViewById(R.id.etFrecuenciaSemanal)
         btnNuevaRutina = view.findViewById(R.id.btnNuevaRutina)
         btnCancelarRutina = view.findViewById(R.id.btnCancelarRutina)
@@ -133,7 +146,10 @@ class RutinaFragment : Fragment() {
                 "${routine.durationMinutes} min • ${routine.exerciseCount} Ejercicios"
             card.findViewById<TextView>(R.id.tvRoutineFrequency).text =
                 "${routine.weeklyFrequency}x/Semana"
-            card.setOnClickListener { showToast("Abriendo '${routine.name}'") }
+            card.setOnClickListener {
+                RoutineDetailDialogFragment.newInstance(routine.id)
+                    .show(childFragmentManager, "routine_detail")
+            }
             containerRutinas.addView(card)
         }
     }
@@ -147,6 +163,35 @@ class RutinaFragment : Fragment() {
         btnNuevaRutina.setOnClickListener { mostrarFormularioNuevaRutina() }
         btnCancelarRutina.setOnClickListener { ocultarFormularioNuevaRutina() }
         btnGuardarRutina.setOnClickListener { guardarNuevaRutina() }
+        btnElegirEjercicios.setOnClickListener { abrirSelectorEjercicios() }
+    }
+
+    private fun abrirSelectorEjercicios() {
+        val intent = Intent(requireContext(), ExercisePickerActivity::class.java)
+        intent.putStringArrayListExtra(ExercisePickerActivity.EXTRA_SELECTED_IDS, ArrayList(selectedExerciseIds))
+        exercisePickerLauncher.launch(intent)
+    }
+
+    private fun handleExercisePickerResult(result: androidx.activity.result.ActivityResult) {
+        if (result.resultCode != Activity.RESULT_OK) return
+        val ids = result.data?.getStringArrayListExtra(ExercisePickerActivity.EXTRA_SELECTED_IDS) ?: return
+        selectedExerciseIds = ids.toList()
+        updateElegirEjerciciosLabel()
+    }
+
+    private fun updateElegirEjerciciosLabel() {
+        btnElegirEjercicios.text = if (selectedExerciseIds.isEmpty()) {
+            getString(R.string.choose_exercises_title)
+        } else {
+            "${getString(R.string.choose_exercises_title)} (${selectedExerciseIds.size})"
+        }
+    }
+
+    private fun selectedCategory(): String = when (rgCategoriaRutina.checkedRadioButtonId) {
+        R.id.rbCategoriaTrenSuperior -> RoutineCategory.TREN_SUPERIOR
+        R.id.rbCategoriaTrenInferior -> RoutineCategory.TREN_INFERIOR
+        R.id.rbCategoriaDescanso -> RoutineCategory.DESCANSO
+        else -> RoutineCategory.FULL_BODY
     }
 
     private fun mostrarFormularioNuevaRutina() {
@@ -158,8 +203,10 @@ class RutinaFragment : Fragment() {
         cardNuevaRutina.visibility = View.GONE
         etNombreRutina.text?.clear()
         etDuracionRutina.text?.clear()
-        etCantidadEjercicios.text?.clear()
         etFrecuenciaSemanal.text?.clear()
+        rgCategoriaRutina.check(R.id.rbCategoriaTrenSuperior)
+        selectedExerciseIds = emptyList()
+        updateElegirEjerciciosLabel()
     }
 
     private fun guardarNuevaRutina() {
@@ -171,18 +218,18 @@ class RutinaFragment : Fragment() {
             return
         }
         val duracion = etDuracionRutina.text.toString().toIntOrNull()
-        val ejercicios = etCantidadEjercicios.text.toString().toIntOrNull()
         val frecuencia = etFrecuenciaSemanal.text.toString().toIntOrNull()
-        if (duracion == null || ejercicios == null || frecuencia == null) {
+        if (duracion == null || frecuencia == null) {
             showToast("Por favor ingresa valores numéricos válidos")
             return
         }
         FitnessValidator.durationError(duracion)?.let { showToast(it); return }
-        FitnessValidator.exerciseCountError(ejercicios)?.let { showToast(it); return }
+        FitnessValidator.exerciseCountError(selectedExerciseIds.size)?.let { showToast(it); return }
         FitnessValidator.weeklyFrequencyError(frecuencia)?.let { showToast(it); return }
+        val category = selectedCategory()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            FitTrackSdk.session.addRoutine(nombre, duracion, ejercicios, frecuencia)
+            FitTrackSdk.session.addRoutine(nombre, duracion, frecuencia, category, selectedExerciseIds)
                 .onSuccess {
                     showToast("Rutina '$nombre' creada")
                     ocultarFormularioNuevaRutina()

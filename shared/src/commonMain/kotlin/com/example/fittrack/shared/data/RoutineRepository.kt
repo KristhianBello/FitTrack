@@ -5,6 +5,7 @@ import com.example.fittrack.shared.config.SupabaseConfig
 import com.example.fittrack.shared.data.dto.RoutineDto
 import com.example.fittrack.shared.data.schema.DbTables
 import com.example.fittrack.shared.domain.Routine
+import com.example.fittrack.shared.domain.RoutineCategory
 import com.example.fittrack.shared.logError
 import com.example.fittrack.shared.platform.randomUuid
 import io.github.jan.supabase.postgrest.from
@@ -44,6 +45,7 @@ class RoutineRepository(
         durationMinutes: Int,
         exerciseCount: Int,
         weeklyFrequency: Int,
+        category: String,
     ): Routine {
         val userId = requireUserId()
         val local = Routine(
@@ -52,6 +54,7 @@ class RoutineRepository(
             durationMinutes = durationMinutes,
             exerciseCount = exerciseCount,
             weeklyFrequency = weeklyFrequency,
+            category = category,
         )
         return try {
             val dto = RoutineDto(
@@ -60,6 +63,7 @@ class RoutineRepository(
                 duracion = durationMinutes,
                 cantidadEjercicios = exerciseCount,
                 frecuenciaSemanal = weeklyFrequency,
+                categoria = category,
             )
             val created = SupabaseConfig.client.from(DbTables.ROUTINES)
                 .insert(dto) {
@@ -93,13 +97,14 @@ class RoutineRepository(
         durationMinutes = duracion,
         exerciseCount = cantidadEjercicios,
         weeklyFrequency = frecuenciaSemanal,
+        category = categoria,
     )
 
     private fun seedRoutines() = listOf(
-        Routine(randomUuid(), "Full Body Día 1", 30, 6, 3),
-        Routine(randomUuid(), "Pecho y Tríceps", 45, 8, 2),
-        Routine(randomUuid(), "Espalda y Bíceps", 40, 7, 2),
-        Routine(randomUuid(), "Piernas Completas", 50, 9, 1),
+        Routine(randomUuid(), "Full Body Día 1", 30, 6, 3, RoutineCategory.FULL_BODY),
+        Routine(randomUuid(), "Pecho y Tríceps", 45, 8, 2, RoutineCategory.TREN_SUPERIOR),
+        Routine(randomUuid(), "Espalda y Bíceps", 40, 7, 2, RoutineCategory.TREN_SUPERIOR),
+        Routine(randomUuid(), "Piernas Completas", 50, 9, 1, RoutineCategory.TREN_INFERIOR),
     )
 
     private companion object {

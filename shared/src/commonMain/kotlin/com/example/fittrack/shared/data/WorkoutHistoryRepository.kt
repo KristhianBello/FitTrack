@@ -8,6 +8,7 @@ import com.example.fittrack.shared.domain.Routine
 import com.example.fittrack.shared.domain.WorkoutSession
 import com.example.fittrack.shared.logError
 import com.example.fittrack.shared.platform.formatIsoTimestamp
+import com.example.fittrack.shared.platform.nowIsoTimestamp
 import com.example.fittrack.shared.platform.randomUuid
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Order
@@ -43,15 +44,17 @@ class WorkoutHistoryRepository(
         durationMinutes: Int = routine.durationMinutes,
     ): WorkoutSession {
         val userId = requireUserId()
+        val nowIso = nowIsoTimestamp()
         val local = WorkoutSession(
             id = randomUuid(),
             routineId = routine.id,
             routineName = routine.name,
             durationMinutes = durationMinutes,
             calories = null,
-            isoTimestamp = "",
+            isoTimestamp = nowIso,
             dateLabel = "Ahora",
             completed = true,
+            category = routine.category,
         )
         return try {
             val dto = WorkoutHistoryDto(
@@ -88,15 +91,17 @@ class WorkoutHistoryRepository(
 
     private fun WorkoutHistoryDto.toDomain(routines: List<Routine>): WorkoutSession {
         val stamp = fecha.orEmpty()
+        val routine = routines.firstOrNull { it.id == routineId }
         return WorkoutSession(
             id = id ?: randomUuid(),
             routineId = routineId,
-            routineName = routines.firstOrNull { it.id == routineId }?.name ?: "Entrenamiento",
+            routineName = routine?.name ?: "Entrenamiento",
             durationMinutes = duracionReal,
             calories = caloriasQuemadas,
             isoTimestamp = stamp,
             dateLabel = if (stamp.isBlank()) "Ahora" else formatIsoTimestamp(stamp),
             completed = completed,
+            category = routine?.category,
         )
     }
 

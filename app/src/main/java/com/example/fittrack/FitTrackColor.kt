@@ -54,8 +54,4 @@ object FitTrackColor {
     val backgroundDark = Color.parseColor("#1A1A2E")
     val cardBackground = Color.parseColor("#16213E")
     val textSecondary = Color.parseColor("#94A3B8")
-
-    // Colores para alerta de sacudida (Sensores)
-    val shakeAlertBackground = Color.parseColor("#FFFF0000")
-    val shakeIdleBodyText = Color.parseColor("#FF333333")
 }

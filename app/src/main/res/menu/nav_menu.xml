@@ -28,9 +28,9 @@
             android:title="@string/nav_about" />
 
         <item
-            android:id="@+id/nav_sensores"
-            android:icon="@drawable/baseline_sensors_24"
-            android:title="@string/nav_sensores" />
+            android:id="@+id/nav_calendario"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/nav_calendario" />
 
     </group>
 

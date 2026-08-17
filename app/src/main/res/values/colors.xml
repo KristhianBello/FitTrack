@@ -47,8 +47,4 @@
     <color name="background_dark">#1A1A2E</color>
     <color name="card_background">#16213E</color>
     <color name="text_secondary">#94A3B8</color>
-
-    <!-- Colores para alerta de sacudida (Sensores) -->
-    <color name="shake_alert_background">#FFFF0000</color>
-    <color name="shake_idle_body_text">#FF333333</color>
 </resources>

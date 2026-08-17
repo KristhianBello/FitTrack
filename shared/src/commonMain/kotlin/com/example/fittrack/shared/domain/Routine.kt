@@ -6,4 +6,5 @@ data class Routine(
     val durationMinutes: Int,
     val exerciseCount: Int,
     val weeklyFrequency: Int,
+    val category: String = RoutineCategory.FULL_BODY,
 )

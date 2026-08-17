@@ -2,9 +2,10 @@ package com.example.fittrack.shared
 
 import com.example.fittrack.shared.auth.AuthManager
 import com.example.fittrack.shared.config.SupabaseConfig
+import com.example.fittrack.shared.data.ExerciseRepository
 import com.example.fittrack.shared.data.ProfileRepository
+import com.example.fittrack.shared.data.RoutineExerciseRepository
 import com.example.fittrack.shared.data.RoutineRepository
-import com.example.fittrack.shared.data.SensorRepository
 import com.example.fittrack.shared.data.WeightRepository
 import com.example.fittrack.shared.data.WorkoutHistoryRepository
 import com.example.fittrack.shared.session.FitTrackSession
@@ -16,14 +17,16 @@ object FitTrackSdk {
     private val weights = WeightRepository(auth)
     private val routines = RoutineRepository(auth)
     private val workouts = WorkoutHistoryRepository(auth)
-    private val sensors = SensorRepository(auth)
+    private val exercises = ExerciseRepository()
+    private val routineExercises = RoutineExerciseRepository()
 
     val session: FitTrackSession = FitTrackSession(
         profiles,
         weights,
         routines,
         workouts,
-        sensors,
+        exercises,
+        routineExercises,
     )
 
     fun initialize(supabaseUrl: String, supabaseAnonKey: String) {

@@ -159,22 +159,63 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Cantidad de Ejercicios -->
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                <!-- Categoría de la rutina -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="@string/routine_category"
+                    android:textColor="@color/track_night"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/rgCategoriaRutina"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:hint="Cantidad de ejercicios">
+                    android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etCantidadEjercicios"
+                    <RadioButton
+                        android:id="@+id/rbCategoriaTrenSuperior"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:textSize="16sp" />
+                        android:buttonTint="@color/fit_glow"
+                        android:checked="true"
+                        android:text="@string/category_tren_superior" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <RadioButton
+                        android:id="@+id/rbCategoriaTrenInferior"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/fit_glow"
+                        android:text="@string/category_tren_inferior" />
+
+                    <RadioButton
+                        android:id="@+id/rbCategoriaFullBody"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/fit_glow"
+                        android:text="@string/category_full_body" />
+
+                    <RadioButton
+                        android:id="@+id/rbCategoriaDescanso"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/fit_glow"
+                        android:text="@string/category_descanso" />
+
+                </RadioGroup>
+
+                <!-- Selección de ejercicios -->
+                <Button
+                    android:id="@+id/btnElegirEjercicios"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/frequency_badge"
+                    android:text="@string/choose_exercises_title"
+                    android:textColor="@color/track_night" />
 
                 <!-- Frecuencia Semanal -->
                 <com.google.android.material.textfield.TextInputLayout

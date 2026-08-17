@@ -39,8 +39,11 @@ object FitnessValidator {
         if (minutes in 1..300) null else "La duración debe estar entre 1 y 300 minutos"
 
     fun exerciseCountError(count: Int): String? =
-        if (count in 1..50) null else "La cantidad de ejercicios debe estar entre 1 y 50"
+        if (count in 1..50) null else "Elige entre 1 y 50 ejercicios para la rutina"
 
     fun weeklyFrequencyError(times: Int): String? =
         if (times in 1..7) null else "La frecuencia debe estar entre 1 y 7 veces por semana"
+
+    fun categoryError(value: String): String? =
+        if (value in RoutineCategory.all) null else "Selecciona una categoría válida"
 }
